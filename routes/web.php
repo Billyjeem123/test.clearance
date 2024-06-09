@@ -27,6 +27,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/register', [AdminController::class, 'register'])->name('admin.login');
     Route::get('/unit', [AdminController::class, 'show_unit'])->name('show_unit');
     Route::post('/create_unit', [AdminController::class, 'create_unit'])->name('create_unit');
+    Route::get('/admin/units', [AdminController::class, 'show_all_units'])->name('show_all_units');
+    Route::delete('/destroy_unit/{id}', [AdminController::class, 'destroy_unit'])->name('destroy_unit');
+
 
 });
 

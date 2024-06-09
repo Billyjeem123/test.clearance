@@ -30,7 +30,7 @@
                 </a>
             </li>
             <li class="nav-item py-2 py-sm-0">
-                <a href="#" class="nav-link text-white" >
+                <a href="{{route('show_all_units')}}" class="nav-link text-white" >
                     <img src="/assets/images/clearance-icon.png" alt="clearance-icon">
                     <span class="fs-4 ms-3 d-none d-sm-inline">Manage Unit</span>
                 </a>

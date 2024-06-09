@@ -37,5 +37,21 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Unit created successfully!');
     }
 
+    public function show_all_units()
+    {
+        $units = Unit::all();
+        return view('admin.unit_list', compact('units'));
+    }
+
+    public function destroy_unit($id)
+    {
+        $unit = Unit::findOrFail($id);
+        $unit->delete();
+
+        return redirect()->back()->with('success', 'Unit deleted successfully');
+    }
+
+
+
 
 }
