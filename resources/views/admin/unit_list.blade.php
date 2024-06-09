@@ -7,17 +7,10 @@
         @include('admin.includes.sidebar')
 
         <div class="col-md-9">
-            <h4>Create Institutional Unit</h4><br><br>
-            <form action="{{ route('create_unit') }}" method="post">
-                @csrf
-                <div class="mb-3">
-                    <label for="unit_name" class="form-label">Unit Name</label>
-                    <input type="text" class="form-control" name="unit_name" id="unit_name" aria-describedby="unit_name" placeholder="Enter Name">
-                </div>
-                <button type="submit" class="btn login-btn">Create Unit</button>
-            </form>
-            <br><br>
             <h4>Units List</h4>
+
+            <br>
+
             <table id="units-table" class="display table table-striped table-bordered">
                 <thead>
                 <tr>

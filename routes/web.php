@@ -31,6 +31,10 @@ Route::prefix('admin')->group(function () {
     Route::delete('/destroy_unit/{id}', [AdminController::class, 'destroy_unit'])->name('destroy_unit');
 
 
+    Route::get('/create_users', [AdminController::class, 'create_users'])->name('create_users');
+    Route::post('/create-create_users', [AdminController::class, 'save_users'])->name('create_staff');
+    Route::post('/admin/users', [AdminController::class, 'show_all_users'])->name('show_all_users');
+    Route::delete('/destroy_users/{id}', [AdminController::class, 'destroy_users'])->name('destroy_users');
 });
 
 

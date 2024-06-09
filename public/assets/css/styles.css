@@ -182,19 +182,19 @@ Variables
     padding: 20px;
     background-color: whitesmoke;
   }
-  form {
-    margin: 2rem;
-    border: 1px solid #cdffa9;
-    box-shadow: 0px 3px 27.2px 4.8px #85bd5d;
-    padding: 3rem 3rem;
-  }
+  /*form {*/
+  /*  margin: 2rem;*/
+  /*  border: 1px solid #cdffa9;*/
+  /*  box-shadow: 0px 3px 27.2px 4.8px #85bd5d;*/
+  /*  padding: 3rem 3rem;*/
+  /*}*/
 
-  form .login-btn {
-    width: 100%;
-    background-color: rgb(53,169,24);
-    color: white;
+  /*form .login-btn {*/
+  /*  width: 100%;*/
+  /*  background-color: rgb(53,169,24);*/
+  /*  color: white;*/
 
-  }
+  /*}*/
 
 
   .footer-content {
