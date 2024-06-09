@@ -106,16 +106,16 @@ class AdminController extends Controller
 
     public function show_all_users()
     {
-        $units = Unit::all();
-        return view('admin.unit_list', compact('units'));
+        $users = User::all();
+        return view('admin.users_list', compact('users'));
     }
 
     public function destroy_users($id)
     {
-        $unit = Unit::findOrFail($id);
+        $unit = User::findOrFail($id);
         $unit->delete();
 
-        return redirect()->back()->with('success', 'Unit deleted successfully');
+        return redirect()->back()->with('success', 'User deleted successfully');
     }
 
 
