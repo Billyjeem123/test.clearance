@@ -146,13 +146,23 @@ class AdminController extends Controller
         return view('admin.manage_roles', compact('staffs', 'roles'));
     }
 
+    public function showUnAssignForm()
+    {
+        $staffs = Staff::all();
+        $roles = Unit::all();
+
+        return view('admin.unassign_role', compact('staffs', 'roles'));
+    }
+
+
+
 
 
     public function assignRole(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'unit_id' => 'required|exists:units,id',
+            'user_id' => 'required',
+            'unit_id' => 'required',
         ]);
 
 
@@ -166,9 +176,9 @@ class AdminController extends Controller
                 ->where('unit_id', $unit->id)
                 ->first();
 
-            if ($existingAssignment) {
-                return redirect()->back()->with('error', 'User has already been assigned to this role: ' . $unit->unit_name)->withInput();
-            }
+//            if ($existingAssignment) {
+//                return redirect()->back()->with('error', 'User has already been assigned to this role: ' . $unit->unit_name)->withInput();
+//            }
 
             // Insert data using raw database query
             DB::table('role_staff')->insert([
@@ -178,14 +188,72 @@ class AdminController extends Controller
                 'updated_at' => now(),
             ]);
 
+            // Create email context details
+            $details = [
+                'role' => $unit->unit_name,
+                'email' => $staff->email,
+                'name' => $staff->name,
+                'pass_key' => $staff->password, // Replace with actual pass key logic if needed
+            ];
+
             // Send notification
-//            $staff->notify(new RoleAssignedNotification($unit, $staff));
+            $staff->notify(new RoleAssignedNotification($details, "Assigned"));
 
             return redirect()->back()->with('success', 'Role assigned successfully!');
         } catch (Exception $e) {
             Log::error('Role assignment failed: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to assign role: ' . $e->getMessage())->withInput();
         }
+
+    }
+
+
+        public function unassignRole(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'unit_id' => 'required|exists:units,id',
+        ]);
+
+
+
+        try {
+            $staff = Staff::findOrFail($request->user_id);
+            $unit = Unit::findOrFail($request->unit_id);
+
+            // Check if the user is assigned to this role
+            $existingAssignment = DB::table('role_staff')
+                ->where('user_id', $staff->user_id)
+                ->where('unit_id', $unit->id)
+                ->first();
+
+            if (!$existingAssignment) {
+                return redirect()->back()->with('error', 'User is not assigned to this role: ' . $unit->unit_name)->withInput();
+            }
+
+            // Remove the assignment using raw database query
+            DB::table('role_staff')
+                ->where('user_id', $staff->user_id)
+                ->where('unit_id', $unit->id)
+                ->delete();
+
+
+            $details = [
+                'role' => $unit->unit_name,
+                'email' => $staff->email,
+                'name' => $staff->name,
+                'pass_key' => $staff->password, // Replace with actual pass key logic if needed
+            ];
+
+            // Send notification
+            $staff->notify(new RoleAssignedNotification($details, "Unassigned"));
+
+            return redirect()->back()->with('success', 'User Has successfully being relieved of role');
+        } catch (Exception $e) {
+            Log::error('Role unassignment failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to unassign role: ' . $e->getMessage())->withInput();
+        }
+
     }
 
 

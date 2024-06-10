@@ -67,9 +67,9 @@
                 </a>
             </li>
             <li class="nav-item py-2 py-sm-0">
-                <a href="{{route('show_all_users')}}" class="nav-link text-white" >
+                <a href="{{route('unassign_role')}}" class="nav-link text-white" >
                     <img src="/assets/images/clearance-icon.png" alt="clearance-icon">
-                    <span class="fs-4 ms-3 d-none d-sm-inline">Manage Users</span>
+                    <span class="fs-4 ms-3 d-none d-sm-inline">Manage Roles</span>
                 </a>
             </li>
 
