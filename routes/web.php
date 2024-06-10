@@ -35,7 +35,11 @@ Route::prefix('admin')->group(function () {
     Route::post('/create-staff', [AdminController::class, 'save_users'])->name('create_staff');
     Route::get('/users', [AdminController::class, 'show_all_users'])->name('show_all_users');
     Route::delete('/destroy_users/{id}', [AdminController::class, 'destroy_users'])->name('destroy_user');
-});
 
+
+    Route::get('/assign-role', [AdminController::class, 'showAssignForm'])->name('assign_role_form');
+    Route::post('/assign-role', [AdminController::class, 'assignRole'])->name('assign_role');
+});
+Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 

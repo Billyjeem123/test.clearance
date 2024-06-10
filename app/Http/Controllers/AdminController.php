@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Staff;
 use App\Models\Unit;
+//use App\Notification\RoleAssignedNotification;
 use App\Models\User;
+use App\Notifications\RoleAssignedNotification;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -117,6 +124,71 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'User deleted successfully');
     }
+
+
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
+
+    public function showAssignForm()
+    {
+        $staffs = Staff::all();
+        $roles = Unit::all();
+
+        return view('admin.manage_roles', compact('staffs', 'roles'));
+    }
+
+
+
+    public function assignRole(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'unit_id' => 'required|exists:units,id',
+        ]);
+
+
+        try {
+            $staff = Staff::findOrFail($request->user_id);
+            $unit = Unit::findOrFail($request->unit_id);
+
+            // Check if the user is already assigned to this role
+            $existingAssignment = DB::table('role_staff')
+                ->where('user_id', $staff->user_id)
+                ->where('unit_id', $unit->id)
+                ->first();
+
+            if ($existingAssignment) {
+                return redirect()->back()->with('error', 'User has already been assigned to this role: ' . $unit->unit_name)->withInput();
+            }
+
+            // Insert data using raw database query
+            DB::table('role_staff')->insert([
+                'user_id' => $staff->user_id,
+                'unit_id' => $unit->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Send notification
+//            $staff->notify(new RoleAssignedNotification($unit, $staff));
+
+            return redirect()->back()->with('success', 'Role assigned successfully!');
+        } catch (Exception $e) {
+            Log::error('Role assignment failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to assign role: ' . $e->getMessage())->withInput();
+        }
+    }
+
+
 
 
 

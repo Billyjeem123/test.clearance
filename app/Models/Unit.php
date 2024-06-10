@@ -13,4 +13,9 @@ class Unit extends Model
 
     protected $table = 'units';
 
+    public function staff()
+    {
+        return $this->belongsToMany(Staff::class, 'role_staff','user_id', 'unit_id');
+    }
+
 }
