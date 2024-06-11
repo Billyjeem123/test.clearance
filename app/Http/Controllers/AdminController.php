@@ -248,7 +248,7 @@ class AdminController extends Controller
             // Send notification
             $staff->notify(new RoleAssignedNotification($details, "Unassigned"));
 
-            return redirect()->back()->with('success', 'User Has successfully being relieved of role');
+            return redirect()->back()->with('success', 'Staff as successfully being relieved of role');
         } catch (Exception $e) {
             Log::error('Role unassignment failed: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to unassign role: ' . $e->getMessage())->withInput();
