@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -28,7 +30,6 @@ class StudentController extends Controller
             'student_name' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'matric_number' => 'required|string|max:255',
             'college_name' => 'required|string|max:255',
             'student_dept' => 'required|string|max:255',
             'student_level' => 'required|string|max:255',
@@ -41,26 +42,27 @@ class StudentController extends Controller
             'student_title' => 'required|string|max:255',
             'student_clinic_card' => 'required|string|max:255',
             'student_marital_status' => 'required|string|max:255',
-            'student_signature' => 'required|file|mimes:jpg,jpeg,png|max:2048', // Validation for the signature
-            'student_passport' => 'required|file|mimes:jpg,jpeg,png|max:2048',  // Validation for the passport
-            'password' => 'required|string|min:8|confirmed', // Validation for the password
+//            'student_signature' => 'required|file|mimes:jpg,jpeg,png|max:2048', // Validation for the signature
+//            'student_passport' => 'required|file|mimes:jpg,jpeg,png|max:2048',  // Validation for the passport
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->errors()->first());
         }
 
+        $matricNumber = $this->matricNumber($request->student_name);
+
         // Create a corresponding User record for authentication
         $user = User::create([
             'name' => $request->student_name,
             'email' => $request->student_email,
-            'password' => bcrypt($request->password), // Hash the password before storing it
+            'password' => bcrypt($matricNumber), // Hash the password before storing it
         ]);
 
         // Handle file uploads
-        $student_signature = $this->uploadStudentSignature($request, 'student_signature');
-        $student_passport = $this->uploadStudentPassport($request, 'student_passport');
-        $matricNumber = $this->matricNumber($request->student_name);
+        $student_signature = $this->uploadStudentSignature($request);
+        $student_passport = $this->uploadStudentPassport($request);
+
 
         // Create a new student record in the database
         $student = Student::create([
@@ -92,27 +94,20 @@ class StudentController extends Controller
         return redirect()->route('student_dashboard')->with('success', 'Registration successful!');
     }
 
-    // Define other methods like student_dashboard if necessary
-
     private function MatricNumber($firstName)
     {
         $firstThreeLetters = strtoupper(substr($firstName, 0, 3));
         $dayOfRegistration = Carbon::now()->format('d');
         $randomDigits = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-        return "FUO/{$firstThreeLetters}/{$dayOfRegistration}/{$randomDigits}";
+        return "FUO/{$dayOfRegistration}/{$randomDigits}";
     }
 
-    public function student_dashboard()
-    {
-        return view('student.index');
-    }
-
-    private function uploadDocAndGetLink(Request $request, $fileKey): ?string
+    private function uploadStudentSignature($request): ?string
     {
         $fileUrl = null;
 
-        if ($request->hasFile($fileKey)) {
-            $file = $request->file($fileKey);
+        if ($request->hasFile('student_signature')) {
+            $file = $request->file('student_signature');
             $fileName = time() . '_' . $file->getClientOriginalName(); // Generate a unique name for the file
             $filePath = $file->storeAs('public/uploads', $fileName);
             $fileUrl = asset('storage/uploads/' . $fileName);
@@ -121,4 +116,22 @@ class StudentController extends Controller
         return $fileUrl;
     }
 
+    private function uploadStudentPassport($request): ?string
+    {
+        $fileUrl = null;
+
+        if ($request->hasFile('student_passport')) {
+            $file = $request->file('student_passport');
+            $fileName = time() . '_' . $file->getClientOriginalName(); // Generate a unique name for the file
+            $filePath = $file->storeAs('public/uploads', $fileName);
+            $fileUrl = asset('storage/uploads/' . $fileName);
+        }
+
+        return $fileUrl;
+    }
+
+    public function student_dashboard()
+    {
+        return view('student.index');
+    }
 }

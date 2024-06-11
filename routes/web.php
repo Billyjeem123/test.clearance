@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StudentController::class, 'index'])->name('index');
 Route::get('/register', [StudentController::class, 'register'])->name('register');
+Route::post('/register', [StudentController::class, 'register_user'])->name('register_user');
+
 
 Route::prefix('admin')->group(function () {
 

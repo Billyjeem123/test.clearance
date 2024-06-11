@@ -1,55 +1,38 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registration</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/styles.css">
-</head>
-<body>
+
+@include('home.includes.header')
 
 @include('home.includes.nav')
 
 
-<form class="row  reg-row g-3">
-
+<form class="row  reg-row g-3" method="POST" action="{{route('register_user')}}">
+@csrf
     <div class="reg-section">
         <h1>Student Registration</h1>
     </div>
     <div class="col-md-4">
         <label for="validationServer01" class="form-label">First name</label>
-        <input type="text" class="form-control" id="validationServer01" value="Yasir" required>
+        <input type="text" class="form-control" id="validationServer01"  name="student_name" required>
 
     </div>
     <div class="col-md-4">
         <label for="validationServer02" class="form-label">Middle name</label>
-        <input type="text" class="form-control" id="validationServer02" value="Moh'd" required>
+        <input type="text" class="form-control" id="validationServer02" name="middlename" required>
         <div class="valid-feedback">
             Looks good!
         </div>
     </div>
     <div class="col-md-4">
         <label for="validationServer02" class="form-label">Last name</label>
-        <input type="text" class="form-control" id="validationServer02" value="Shobaloju" required>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-    </div>
-    <div class="col-md-4">
-        <label for="validationServer01" class="form-label">Matric Number</label>
-        <input type="text" class="form-control" id="validationServer01" value="FUO/20/0401" required>
+        <input type="text" class="form-control" id="validationServer02" name="lastname" required>
         <div class="valid-feedback">
             Looks good!
         </div>
     </div>
 
+
     <div class="col-md-4">
         <label for="validationServer04" class="form-label">College</label>
-        <select class="form-select" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+        <select class="form-select" name="college_name"  id="validationServer04" aria-describedby="validationServer04Feedback" required>
             <option selected disabled value="">Choose...</option>
             <option>College of Art</option>
             <option>College of Natural and Applied Sciences</option>
@@ -63,7 +46,7 @@
     </div>
     <div class="col-md-4">
         <label for="validationServer04" class="form-label">Department</label>
-        <select class="form-select" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+        <select class="form-select" name="student_dept" id="validationServer04" aria-describedby="validationServer04Feedback" required>
             <option selected disabled value="">Choose...</option>
             <option>Computer and Mathematical Sciences</option>
             <option>Nursing</option>
@@ -91,7 +74,7 @@
     </div>
     <div class="col-md-3">
         <label for="validationServer04" class="form-label">Level</label>
-        <select class="form-select" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+        <select class="form-select"  name="student_level" id="validationServer04" aria-describedby="validationServer04Feedback" required>
             <option selected disabled value="">Choose...</option>
             <option>100</option>
             <option>200</option>
@@ -106,7 +89,7 @@
 
     <div class="col-md-3">
         <label for="validationServer04" class="form-label">State of Origin</label>
-        <select class="form-select" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+        <select class="form-select" name="student_origin" id="validationServer04" aria-describedby="validationServer04Feedback" required>
             <option selected disabled value="">Choose...</option>
             <option>Abia</option>
             <option>Adamawa</option>
@@ -152,28 +135,28 @@
     </div>
     <div class="col-md-6">
         <label for="validationServer03" class="form-label">Home Address</label>
-        <input type="text" class="form-control" id="validationServer03" aria-describedby="validationServer03Feedback" required>
+        <input type="text"  name="student_address"  class="form-control" id="validationServer03" aria-describedby="validationServer03Feedback" required>
         <div id="validationServer03Feedback" class="invalid-feedback">
             Fill in your home address.
         </div>
     </div>
     <div class="col-md-3">
         <label for="validationServer05" class="form-label">Email Address</label>
-        <input type="email" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
+        <input type="email" name="student_email" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
         <div id="validationServer05Feedback" class="invalid-feedback">
             Please provide a valid email.
         </div>
     </div>
     <div class="col-md-3">
         <label for="validationServer05" class="form-label">Date of Birth</label>
-        <input type="date" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
+        <input type="date" name="student_dob" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
         <div id="validationServer05Feedback" class="invalid-feedback">
             Please provide a valid email.
         </div>
     </div>
     <div class="col-md-3">
         <label for="validationServer04" class="form-label">Hostel</label>
-        <select class="form-select" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+        <select class="form-select" name="student_hostel" id="validationServer04" aria-describedby="validationServer04Feedback" required>
             <option selected disabled value="">Choose...</option>
             <option>Adegunwa</option>
             <option>Jubril Ayinla</option>
@@ -191,12 +174,12 @@
     </div>
     <div class="col-md-3">
         <label for="validationServer05" class="form-label">Room Number</label>
-        <input type="text" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
+        <input type="text" name="student_room_num" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
 
     </div>
     <div class="col-md-4">
         <label for="validationServer04" class="form-label">Title</label>
-        <select class="form-select" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+        <select class="form-select" name="student_title" id="validationServer04" aria-describedby="validationServer04Feedback" required>
             <option selected disabled value="">Choose...</option>
             <option>Mr</option>
             <option>Miss</option>
@@ -208,7 +191,7 @@
         </div>
     </div><div class="col-md-4">
         <label for="validationServer04" class="form-label">Marital Status</label>
-        <select class="form-select" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+        <select class="form-select"  name="student_marital_status" id="validationServer04" aria-describedby="validationServer04Feedback" required>
             <option selected disabled value="">Choose...</option>
             <option>Single</option>
             <option>Married</option>
@@ -221,15 +204,15 @@
     </div>
     <div class="col-md-4">
         <label for="validationServer03" class="form-label">Clinic Card Number</label>
-        <input type="text" class="form-control" id="validationServer03" aria-describedby="validationServer03Feedback" required>
+        <input type="text" name="student_clinic_card" class="form-control" id="validationServer03" aria-describedby="validationServer03Feedback" required>
     </div>
     <div class="mb-3 col-md-6">
         <label for="formFile" class="form-label">Upload Passport</label>
-        <input class="form-control" type="file" id="formFile">
+        <input name="student_passport" class="form-control" type="file" id="formFile">
     </div>
     <div class="mb-3 col-md-6">
         <label for="formFile" class="form-label">Upload signature</label>
-        <input class="form-control" type="file" id="formFile">
+        <input name="student_signature" class="form-control" type="file" id="formFile">
     </div>
     <div class="col-12">
         <div class="form-check">
@@ -286,13 +269,6 @@
         </div>
     </div>
 </div>
-<!-- End of Footer -->
 
 
-
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+@include('home.includes.footer');
