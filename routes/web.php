@@ -45,3 +45,8 @@ Route::prefix('admin')->group(function () {
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 
+Route::prefix('student')->group(function () {
+    Route::get('/', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
+});
+
+
