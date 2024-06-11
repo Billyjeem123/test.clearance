@@ -49,6 +49,7 @@ Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 Route::prefix('student')->group(function () {
     Route::get('/', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
+    Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
 });
 
 

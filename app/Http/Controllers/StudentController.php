@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\Unit;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -132,6 +133,15 @@ class StudentController extends Controller
 
     public function student_dashboard()
     {
-        return view('student.index');
+         $unit = Unit::all();
+        return view('student.index', compact('unit'));
     }
+
+      public function clearance_approval_unit($unit_id){
+
+          $unit = Unit::find($unit_id);
+
+          return view('student.process', compact('unit'));
+
+}
 }

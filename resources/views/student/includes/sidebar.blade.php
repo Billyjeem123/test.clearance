@@ -8,17 +8,19 @@
                 </a>
             </li>
             <li class="nav-item py-2 py-sm-0">
-                <a href="#" class="nav-link text-white" >
-                    <img src="/assets/images/document-icon.png" alt="document-icon">
-                    <span class="fs-4 ms-3 d-none d-sm-inline"> Document </span>
+                <a href="#" class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"  >
+                    <img src="/assets/images/dashboard-icon.png" alt="document-icon">
+                    <span class="fs-4 ms-3 d-none d-sm-inline"> Clearance Units</span>
                 </a>
+                <ul class="dropdown-menu">
+                    @foreach ($units as $unit)
+                        <li><a class="dropdown-item" href="{{route('clearance_approval_unit', $unit->id)}}">{{ $unit->unit_name . ' Unit' }} </a></li>
+                    @endforeach
+                </ul>
+
+
             </li>
-            <li class="nav-item py-2 py-sm-0">
-                <a href="#" class="nav-link text-white" >
-                    <img src="/assets/images/clearance-icon.png" alt="clearance-icon">
-                    <span class="fs-4 ms-3 d-none d-sm-inline"> Final Year Clearance </span>
-                </a>
-            </li>
+
         </ul>
     </div>
 </div>
