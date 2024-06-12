@@ -59,7 +59,7 @@
                         <label for="staff_email" class="form-label">Staff Email</label>
                         <input type="file" class="form-control" name="documents" id="staff_email" aria-describedby="staff_email" placeholder="Enter Email" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Create Staff</button>
+                    <button type="submit" class="btn login-btn">Upload Docs</button>
                 </form>
             </div>
 
