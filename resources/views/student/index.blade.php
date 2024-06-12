@@ -75,30 +75,30 @@
 
                 <br>
 
-                <table id="units-table" class="display table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Unit Name</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($units as $unit)
+                    <table id="units-table" class="display table table-striped table-bordered">
+                        <thead>
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $unit->unit_name }}</td>
-                            <td>
-                                <form action="{{ route('destroy_unit', $unit->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this unit?')">Delete</button>
-                                </form>
-                            </td>
+                            <th>ID</th>
+                            <th>Unit Name</th>
+                            <th>Actions</th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @foreach($units as $unit)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $unit->unit_name }}</td>
+                                <td>
+                                    <form action="{{ route('destroy_unit', $unit->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this unit?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
             </div>
 
         </div>

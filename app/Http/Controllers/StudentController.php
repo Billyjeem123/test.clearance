@@ -138,7 +138,13 @@ class StudentController extends Controller
     public function student_dashboard()
     {
          $unit = Unit::all();
-        return view('student.index', compact('unit'));
+
+        $clearance = Unit::with(['documents' => function ($query) {
+            $query->where('user_id', Auth::id());
+        }]);
+
+
+        return view('student.index', compact('unit', 'clearance'));
     }
 
     public function clearance_approval_unit($unit_id)
