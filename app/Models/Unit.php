@@ -18,4 +18,11 @@ class Unit extends Model
         return $this->belongsToMany(Staff::class, 'role_staff','user_id', 'unit_id');
     }
 
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+
+
 }

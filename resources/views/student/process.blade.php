@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css">
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <style>
         body {
             font-family: 'Nunito', sans-serif;
@@ -48,51 +50,67 @@
 
         <div class="col-md-9">
             <div class="form-section">
-                <form action="{{ route('create_staff') }}" method="post" class="p-4 border rounded shadow-sm bg-white">
+                <form action="{{route('save_documents')}}" method="post" class="p-4 border rounded shadow-sm bg-white" enctype="multipart/form-data">
                     @csrf
-                    <h4 class="mb-4 text-center">Upload {{$unit->unit_name}} Verifcation Docs</h4>
-                    <div class="mb-3">
-                        <label for="document_names" class="form-label">Document Names</label>
-                        <input type="text" class="form-control" name="document_names" id="document_names" aria-describedby="document_names" placeholder="Enter document names, separated by commas" required>
+                    <input type="hidden" name="unit_id" value="{{ $unit->id }}">
+                    <h4 class="mb-4 text-center">Upload {{ $unit->unit_name }} Verification Docs</h4>
+
+                    <div id="document-uploads">
+                        <div class="document-upload mb-3">
+                            <label for="document_names" class="form-label">Document Name</label>
+                            <input type="text" class="form-control" name="document_names[]" placeholder="Enter document name" required>
+
+                            <label for="documents" class="form-label">Document File</label>
+                            <input type="file" class="form-control" name="documents[]" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="staff_email" class="form-label">Staff Email</label>
-                        <input type="file" class="form-control" name="documents" id="staff_email" aria-describedby="staff_email" placeholder="Enter Email" required>
-                    </div>
-                    <button type="submit" class="btn login-btn">Upload Docs</button>
+
+                    <button type="button" class="btn btn-secondary" onclick="addDocumentField()">Add Another Document</button>
+                    <button type="submit" class="btn btn-primary">Upload Docs</button>
                 </form>
+
+                <script>
+                    function addDocumentField() {
+                        const uploadContainer = document.getElementById('document-uploads');
+                        const newUpload = document.createElement('div');
+                        newUpload.classList.add('document-upload', 'mb-3');
+                        newUpload.innerHTML = `
+            <label for="document_names" class="form-label">Document Name</label>
+            <input type="text" class="form-control" name="document_names[]" placeholder="Enter document name" required>
+
+            <label for="documents" class="form-label">Document File</label>
+            <input type="file" class="form-control" name="documents[]" required>
+        `;
+                        uploadContainer.appendChild(newUpload);
+                    }
+                </script>
+
             </div>
 
-            <div class="units-section">
-                <h4 class="text-center">Units List</h4>
-                <table id="units-table" class="display table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Unit Name</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($units as $unit)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $unit->unit_name }}</td>
-                            <td>
-                                <form action="{{ route('destroy_unit', $unit->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this unit?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+
         </div>
     </div>
 </div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+PmAzLB4v5BT8aHUXElmKUHitfK3I" crossorigin="anonymous"></script>
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    @if(Session::has('success'))
+    toastr.success("{{ Session::get('success') }}");
+    @endif
+
+    @if(Session::has('error'))
+    toastr.error("{{ Session::get('error') }}");
+    @endif
+
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

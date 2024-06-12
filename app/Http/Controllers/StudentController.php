@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Document;
 use App\Models\Student;
 use App\Models\Unit;
 use App\Models\User;
@@ -21,8 +22,6 @@ class StudentController extends Controller
 
         return view('home.register');
     }
-
-
 
     public function register_user(Request $request)
     {
@@ -131,17 +130,57 @@ class StudentController extends Controller
         return $fileUrl;
     }
 
+    public function login(){
+
+        return view('home.login');
+    }
+
     public function student_dashboard()
     {
          $unit = Unit::all();
         return view('student.index', compact('unit'));
     }
 
-      public function clearance_approval_unit($unit_id){
+    public function clearance_approval_unit($unit_id)
+    {
 
-          $unit = Unit::find($unit_id);
+        $unit  = Unit::find($unit_id);
 
-          return view('student.process', compact('unit'));
+        return view('student.process', compact('unit'));
+    }
 
-}
+
+    public function save_documents(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'unit_id' => 'required|exists:units,id',
+            'document_names' => 'required|array',
+            'document_names.*' => 'required|string',
+            'documents' => 'required|array',
+            'documents.*' => 'required|file|mimes:pdf,doc,docx'
+        ]);
+
+        $unitId = $request->unit_id;
+        $documentNames = $request->document_names;
+        $userId = Auth::id();
+
+        if (count($documentNames) != count($request->file('documents'))) {
+            return redirect()->back()->with('error', 'Number of document names must match the number of uploaded files.');
+        }
+
+        foreach ($request->file('documents') as $index => $file) {
+            $filePath = $file->store('documents');
+
+            Document::create([
+                'unit_id' => $unitId,
+                'user_id' => $userId,
+                'names' => $documentNames[$index],
+                'file_path' => $filePath
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Documents uploaded successfully.');
+    }
+
 }

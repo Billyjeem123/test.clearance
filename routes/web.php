@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [StudentController::class, 'index'])->name('index');
 Route::get('/register', [StudentController::class, 'register'])->name('register');
 Route::post('/register', [StudentController::class, 'register_user'])->name('register_user');
-
+Route::get('/login', [StudentController::class, 'login'])->name('login');
 
 Route::prefix('admin')->group(function () {
 
@@ -47,9 +47,10 @@ Route::prefix('admin')->group(function () {
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 
-Route::prefix('student')->group(function () {
+Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('/', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
     Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
+    Route::post('/save/documents', [StudentController::class, 'save_documents'])->name('save_documents');
 });
 
 
