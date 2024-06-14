@@ -189,4 +189,31 @@ class StudentController extends Controller
         return redirect()->back()->with('success', 'Documents uploaded successfully.');
     }
 
+
+
+    public function login_user(Request $request)
+    {
+        $credentials = $request->validate([
+            'matric_number' => 'required|string',
+            'firstname' => 'required|string',
+        ]);
+
+        // Fetch the user by matric number
+        $user = User::where('matric_number', $credentials['matric_number'])->first();
+
+        echo json_encode($user);
+
+        exit;
+
+        if ($user && $user->firstname === $credentials['firstname']) {
+            // Manually log in the user
+            Auth::login($user);
+
+            return redirect()->intended('dashboard');
+        }
+
+
+        return redirect()->back()->with('error', 'The provided credentials do not match our records.');
+    }
+
 }

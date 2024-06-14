@@ -22,7 +22,7 @@ Route::get('/', [StudentController::class, 'index'])->name('index');
 Route::get('/register', [StudentController::class, 'register'])->name('register');
 Route::post('/register', [StudentController::class, 'register_user'])->name('register_user');
 Route::get('/login', [StudentController::class, 'login'])->name('login');
-
+Route::post('/login', [StudentController::class, 'login_user'])->name('login_user');
 Route::prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
