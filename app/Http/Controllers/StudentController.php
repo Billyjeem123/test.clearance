@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
@@ -193,25 +194,16 @@ class StudentController extends Controller
 
     public function login_user(Request $request)
     {
-        $credentials = $request->validate([
-            'matric_number' => 'required|string',
-            'firstname' => 'required|string',
-        ]);
 
         // Fetch the user by matric number
-        $user = User::where('matric_number', $credentials['matric_number'])->first();
+        $user = User::where('password', Hash::make($request->matric_number))->first();
 
-        echo json_encode($user);
-
-        exit;
-
-        if ($user && $user->firstname === $credentials['firstname']) {
+        if ($user && $user->name === $request->name) {
             // Manually log in the user
             Auth::login($user);
 
             return redirect()->intended('dashboard');
         }
-
 
         return redirect()->back()->with('error', 'The provided credentials do not match our records.');
     }
