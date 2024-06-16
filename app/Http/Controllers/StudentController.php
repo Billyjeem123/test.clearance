@@ -57,7 +57,8 @@ class StudentController extends Controller
         $user = User::create([
             'name' => $request->student_name,
             'email' => $request->student_email,
-            'password' => bcrypt($matricNumber), // Hash the password before storing it
+            'password' => bcrypt($matricNumber), // Hash the password before storing it,
+            'matric_number' => $matricNumber,
         ]);
 
         // Handle file uploads
@@ -194,18 +195,24 @@ class StudentController extends Controller
 
     public function login_user(Request $request)
     {
+        // Validate the incoming request data
+        $credentials = $request->validate([
+            'matric_number' => 'required|string',
+            'firstname' => 'required|string',
+        ]);
 
         // Fetch the user by matric number
-        $user = User::where('password', Hash::make($request->matric_number))->first();
+        $user = User::where('matric_number', $credentials['matric_number'])->first();
 
-        if ($user && $user->name === $request->name) {
+        if ($user && $user->name === $credentials['firstname'] && Hash::check($credentials['matric_number'], $user->password)) {
             // Manually log in the user
             Auth::login($user);
 
-            return redirect()->intended('dashboard');
+            return redirect()->intended('student_dashboard');
         }
 
         return redirect()->back()->with('error', 'The provided credentials do not match our records.');
     }
+
 
 }

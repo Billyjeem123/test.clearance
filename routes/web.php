@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +50,15 @@ Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('/', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
+    Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
+    Route::post('/save/documents', [StudentController::class, 'save_documents'])->name('save_documents');
+});
+
+
+
+//Route::prefix('staff')->middleware('auth')->group(function () {
+Route::prefix('staff')->group(function () {
+    Route::get('/', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
     Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
     Route::post('/save/documents', [StudentController::class, 'save_documents'])->name('save_documents');
 });
