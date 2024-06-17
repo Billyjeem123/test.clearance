@@ -16,7 +16,7 @@
                     <a class="nav-link" href="">Clearance</a>
                 </li>
                 <div class="btn">
-                    <a class="btn getstarted-btn" href="" role="button" data-bs-toggle="" aria-expanded="false">
+                    <a class="btn getstarted-btn" href="{{route('logout')}}" role="button" data-bs-toggle="" aria-expanded="false">
                         Log Out
                         <img src="/assets/images/logout-icon.png" alt="logout icon">
                     </a>

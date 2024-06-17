@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent" >
             <ul class="navbar-nav me-right mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="index.html">Home</a>
+                    <a class="nav-link active" href="">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('register')}}">Registration</a>
@@ -30,8 +30,9 @@
                             Sign Up
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
-                            <li><a class="dropdown-item" href="{{ route('register') }}">Register</a></li>
+                            <li><a class="dropdown-item" href="{{ route('login') }}">Student Login</a></li>
+                            <li><a class="dropdown-item" href="{{ route('register') }}">Student Register</a></li>
+                            <li><a class="dropdown-item" href="{{ route('staff_login') }}">Staff Login</a></li>
                         </ul>
                     @endif
                 </div>

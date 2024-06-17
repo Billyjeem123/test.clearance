@@ -23,9 +23,10 @@ Route::get('/', [StudentController::class, 'index'])->name('index');
 Route::get('/register', [StudentController::class, 'register'])->name('register');
 Route::post('/register', [StudentController::class, 'register_user'])->name('register_user');
 Route::get('/login', [StudentController::class, 'login'])->name('login');
+Route::get('/staff-login', [StudentController::class, 'staff_login'])->name('staff_login');
 Route::post('/login', [StudentController::class, 'login_user'])->name('login_user');
-Route::prefix('admin')->group(function () {
 
+Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/register', [AdminController::class, 'register'])->name('admin.login');
     Route::get('/unit', [AdminController::class, 'show_unit'])->name('show_unit');
@@ -52,6 +53,7 @@ Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('/', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
     Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
     Route::post('/save/documents', [StudentController::class, 'save_documents'])->name('save_documents');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('student_logout');
 });
 
 

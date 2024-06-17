@@ -137,6 +137,13 @@ class StudentController extends Controller
         return view('home.login');
     }
 
+
+
+    public function staff_login(){
+
+        return view('home.staff_login');
+    }
+
     public function student_dashboard()
     {
          $unit = Unit::all();
@@ -208,7 +215,7 @@ class StudentController extends Controller
             // Manually log in the user
             Auth::login($user);
 
-            return redirect()->intended('student_dashboard');
+            return redirect()->route('student_dashboard');
         }
 
         return redirect()->back()->with('error', 'The provided credentials do not match our records.');
