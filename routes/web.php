@@ -25,6 +25,7 @@ Route::post('/register', [StudentController::class, 'register_user'])->name('reg
 Route::get('/login', [StudentController::class, 'login'])->name('login');
 Route::get('/staff-login', [StudentController::class, 'staff_login'])->name('staff_login');
 Route::post('/login', [StudentController::class, 'login_user'])->name('login_user');
+Route::post('/process-staff-login', [StudentController::class, 'login_staff'])->name('login_staff');
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
@@ -38,12 +39,13 @@ Route::prefix('admin')->group(function () {
     Route::get('/create_users', [AdminController::class, 'create_users'])->name('create_users');
     Route::post('/create-staff', [AdminController::class, 'save_users'])->name('create_staff');
     Route::get('/users', [AdminController::class, 'show_all_users'])->name('show_all_users');
+    Route::get('/staffs', [AdminController::class, 'show_all_staffs'])->name('show_all_staffs');
     Route::delete('/destroy_users/{id}', [AdminController::class, 'destroy_users'])->name('destroy_user');
 
 
-    Route::get('/assign-role', [AdminController::class, 'showAssignForm'])->name('assign_role_form');
+    Route::get('/assign-role-staff', [AdminController::class, 'showAssignForm'])->name('assign_role_form');
     Route::post('/assign-role', [AdminController::class, 'assignRole'])->name('assign_role');
-    Route::get('/unassign-role', [AdminController::class, 'showUnAssignForm'])->name('assign_role_form');
+    Route::get('/unassign-role', [AdminController::class, 'showUnAssignForm'])->name('unassign_role_form');
     Route::post('/unassign-role', [AdminController::class, 'unassignRole'])->name('unassign_role');
 });
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');

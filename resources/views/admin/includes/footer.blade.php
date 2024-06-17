@@ -18,7 +18,6 @@
     toastr.error("{{ Session::get('error') }}");
     @endif
 
-    toastr.error("jjjvc")
 
 </script>
 

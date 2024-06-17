@@ -42,7 +42,7 @@
 </head>
 <body>
 
-@include('student.includes.nav')
+@include('staff.includes.nav')
 
 <div class="container-fluid">
     <div class="row flex-nowrap">

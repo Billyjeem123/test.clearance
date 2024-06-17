@@ -7,7 +7,7 @@
         @include('admin.includes.sidebar')
 
         <div class="col-md-9">
-            <h4>Users List</h4>
+            <h4>Staffs List</h4>
 
             <br>
 
@@ -17,7 +17,7 @@
                     <th>ID</th>
                     <th>User Name</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Units (Roles)</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -27,7 +27,15 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->email }}</td>
+                        <td>
+                            @if($user->user->units->isEmpty())
+                                <p>No units assigned</p>
+                            @else
+                                @foreach($user->user->units as $unit)
+                                    <p>{{ $unit->unit_name }}</p>
+                                @endforeach
+                            @endif
+                        </td>
                         <td>
                             <form action="{{ route('destroy_user', $user->id) }}" method="POST">
                                 @csrf

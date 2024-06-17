@@ -88,6 +88,7 @@ class AdminController extends Controller
         $user = User::create([
             'name' => $request->staff_name,
             'email' => $request->staff_email,
+            'matric_number' => $generatePasswordNumber,
             'password' => Hash::make($generatePasswordNumber), // Set a default password, you may want to prompt for this or generate it
         ]);
 
@@ -117,9 +118,23 @@ class AdminController extends Controller
         return view('admin.users_list', compact('users'));
     }
 
+    public function show_all_staffs()
+    {
+        // Fetch all users who are staff along with their respective units
+//        $users = User::with(['staff', 'units'])->get();
+        $users = Staff::with(['user.units'])->get();
+
+//
+//        echo "<pre>";
+//        echo json_encode($users, JSON_PRETTY_PRINT);
+//        echo "</pre>";
+
+        return view('admin.staff_list', compact('users'));
+    }
+
     public function destroy_users($id)
     {
-        $unit = User::findOrFail($id);
+        $unit = Staff::findOrFail($id);
         $unit->delete();
 
         return redirect()->back()->with('success', 'User deleted successfully');

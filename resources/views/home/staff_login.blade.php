@@ -4,17 +4,17 @@
 @include('home.includes.nav')
 
 
-<form class="row reg-row g-3" method="POST" action="{{route('login_user')}}">
+<form class="row reg-row g-3" method="POST" action="{{route('login_staff')}}">
     @csrf
     <div class="reg-section">
-        <h1>Student Login</h1>
+        <h1>Staff Login</h1>
     </div>
 
     <div class="col-md-6">
-        <label for="matric_number" class="form-label">Matric Number</label>
-        <input type="text" class="form-control" id="matric_number" name="matric_number" required>
+        <label for="matric_number" class="form-label">Pass Key</label>
+        <input type="text" class="form-control" id="matric_number" name="pass_key" required>
         <div class="invalid-feedback">
-            Please provide your matric number.
+            Please provide your Pass key.
         </div>
     </div>
 

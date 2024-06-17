@@ -54,4 +54,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Staff::class);
     }
+
+
+
+    public function units()
+    {
+        return $this->belongsToMany(Unit::class, 'role_staff')->withPivot('unit_id');
+    }
 }

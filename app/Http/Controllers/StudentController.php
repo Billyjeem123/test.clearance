@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\Unit;
 use App\Models\User;
@@ -220,6 +221,38 @@ class StudentController extends Controller
 
         return redirect()->back()->with('error', 'The provided credentials do not match our records.');
     }
+
+
+
+    public function login_staff(Request $request)
+    {
+        // Validate the incoming request data
+        $credentials = [
+            'matric_number' => 'required|string',
+            'firstname' => 'required|string',
+        ];
+
+        // Fetch the user by matric number
+        $user = User::where('matric_number', $credentials['matric_number'])->first();
+
+        // Check if the user exists and the firstname matches
+        if ($user && $user->firstname === $credentials['firstname'] && Hash::check($credentials['matric_number'], $user->password)) {
+            // Check if the user is a staff member
+            $staff = Staff::where('user_id', $user->id)->first();
+
+            if ($staff) {
+                // Manually log in the user
+                Auth::login($user);
+
+                return redirect()->route('staff_dashboard');
+            } else {
+                return redirect()->back()->with('error', 'The provided credentials do not match our records.');
+            }
+        }
+
+        return redirect()->back()->with('error', 'The provided credentials do not match our records.');
+    }
+
 
 
 }
