@@ -46,7 +46,7 @@
 
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        @include('student.includes.sidebar')
+        @include('staff.includes.sidebar')
 
         <div class="col-md-9">
             <div class="form-section">

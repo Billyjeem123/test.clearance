@@ -27,4 +27,13 @@ class StaffController extends Controller
 
         return view('staff.index', compact('unit', 'clearance'));
     }
-}
+
+
+
+     public function  submitted_docs()
+     {
+         $units= Unit::all();
+
+         return view('staff.credentials', compact('units'));
+            }
+            }

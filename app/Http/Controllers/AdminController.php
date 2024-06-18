@@ -88,6 +88,7 @@ class AdminController extends Controller
         $user = User::create([
             'name' => $request->staff_name,
             'email' => $request->staff_email,
+            'role' => "staff",
             'matric_number' => $generatePasswordNumber,
             'password' => Hash::make($generatePasswordNumber), // Set a default password, you may want to prompt for this or generate it
         ]);

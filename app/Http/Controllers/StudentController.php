@@ -58,6 +58,7 @@ class StudentController extends Controller
         $user = User::create([
             'name' => $request->student_name,
             'email' => $request->student_email,
+            'role' => "student",
             'password' => bcrypt($matricNumber), // Hash the password before storing it,
             'matric_number' => $matricNumber,
         ]);
