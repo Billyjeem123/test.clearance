@@ -59,6 +59,6 @@ class User extends Authenticatable
 
     public function units()
     {
-        return $this->belongsToMany(Unit::class, 'role_staff')->withPivot('unit_id');
+        return $this->belongsToMany(Unit::class, 'role_staff', 'user_id', 'unit_id');
     }
 }

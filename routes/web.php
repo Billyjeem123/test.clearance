@@ -26,6 +26,7 @@ Route::get('/login', [StudentController::class, 'login'])->name('login');
 Route::get('/staff-login', [StudentController::class, 'staff_login'])->name('staff_login');
 Route::post('/login', [StudentController::class, 'login_user'])->name('login_user');
 Route::post('/process-staff-login', [StudentController::class, 'login_staff'])->name('login_staff');
+Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->middleware('auth.staff')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
@@ -48,7 +49,6 @@ Route::prefix('admin')->middleware('auth.staff')->group(function () {
     Route::get('/unassign-role', [AdminController::class, 'showUnAssignForm'])->name('unassign_role_form');
     Route::post('/unassign-role', [AdminController::class, 'unassignRole'])->name('unassign_role');
 });
-Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 
 Route::prefix('student')->middleware('auth.student')->group(function () {
@@ -61,7 +61,6 @@ Route::prefix('student')->middleware('auth.student')->group(function () {
 
 
 Route::prefix('staff')->middleware('auth.staff')->group(function () {
-//Route::prefix('staff')->group(function () {
     Route::get('/', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
     Route::get('/submitted/documents', [StaffController::class, 'submitted_docs'])->name('submitted_docs');
 });

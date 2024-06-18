@@ -10,22 +10,22 @@ class StaffController extends Controller
 {
     public function staff_dashboard()
     {
-        $unit = Unit::all();
-
         $user = auth()->user();
         $staff = $user->staff;
 
-        #  Get the units associated with the staff
-        $units = $staff->roles;
+  #  Get the user associated with the staff
+        $user = $staff->user;
 
-        echo json_encode($units);
+        $units = $user->units()->first();
 
-        $clearance = Unit::with(['documents' => function ($query) {
-            $query->where('unit_id', Auth::id());
-        }]);
+        $clearance = Unit::with(['documents.user'])->findOrFail($units->id);
+
+         echo "<pre>";
+         echo json_encode($clearance, JSON_PRETTY_PRINT);
+         ECHO "</pre>";
 
 
-        return view('staff.index', compact('unit', 'clearance'));
+        return view('staff.index', compact( 'clearance'));
     }
 
 

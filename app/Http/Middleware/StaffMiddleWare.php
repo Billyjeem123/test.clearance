@@ -17,7 +17,7 @@ class StaffMiddleWare
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check() || Auth::user()->role !== 'staff') {
-            return redirect()->route('login')->with('error', 'UnAuthorized');
+            return redirect()->route('staff_login')->with('error', 'UnAuthorized');
         }
 
         return $next($request);

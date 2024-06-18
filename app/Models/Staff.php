@@ -18,13 +18,13 @@ class Staff extends Model
         return $this->belongsTo(User::class);
     }
 
-//    public function roles()
-//    {
-//        return $this->belongsToMany(Unit::class, 'role_staff','user_id', 'unit_id');
-//    }
-
-    public function units()
+    public function roles()
     {
-        return $this->belongsToMany(Unit::class, 'role_staff')->withPivot('role_id');
+        return $this->belongsToMany(Unit::class, 'role_staff','user_id', 'unit_id');
     }
+
+//    public function units()
+//    {
+//        return $this->belongsToMany(Unit::class, 'role_staff')->withPivot('user_id', 'unit_id');
+//    }
 }

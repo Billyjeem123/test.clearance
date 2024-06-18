@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>student-dashboard</title>
+    <title>Staff Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,32 +75,40 @@
 
                 <br>
 
-                    <table id="units-table" class="display table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Unit Name</th>
-                            <th>Actions</th>
-                            <th>Clearance  Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($units as $unit)
+                <table id="units-table" class="display table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Unit Name</th>
+                        <th>Document Name</th>
+                        <th>Document Path</th>
+                        <th>Uploaded By</th>
+                        <th>Matric Number</th>
+                        <th>Clearance Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if($clearance)
+                        @foreach($clearance->documents as $document)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $unit->unit_name }}</td>
-                                <td>
-                                    <form action="{{ route('destroy_unit', $unit->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this unit?')">Delete</button>
-                                    </form>
-                                </td>
+                                <td>{{ $clearance->id }}</td>
+                                <td>{{ $clearance->unit_name }}</td>
+                                <td>{{ $document->names }}</td>
+                                <td><a href="{{ Storage::url($document->file_path) }}" target="_blank">View Document</a></td>
+                                <td>{{ $document->user->name }} ({{ $document->user->email }})</td>
+                                <td>{{ $document->user->matric_number }}</td>
                                 <td><a href="">View Status</a></td>
                             </tr>
                         @endforeach
-                        </tbody>
-                    </table>
+                    @else
+                        <tr>
+                            <td colspan="7">No documents found</td>
+                        </tr>
+                    @endif
+                    </tbody>
+                </table>
+
+
             </div>
 
         </div>

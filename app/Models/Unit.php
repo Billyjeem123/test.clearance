@@ -20,17 +20,12 @@ class Unit extends Model
 
     public function documents()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Document::class, 'unit_id', 'id');
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'role_staff')->withPivot('unit_id');
-    }
-
-    public function staffs()
-    {
-        return $this->belongsToMany(Staff::class, 'role_staff')->withPivot('unit_id');
+        return $this->belongsToMany(User::class, 'role_staff', 'unit_id', 'user_id');
     }
 
 
