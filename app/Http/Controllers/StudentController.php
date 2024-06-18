@@ -226,20 +226,14 @@ class StudentController extends Controller
 
     public function login_staff(Request $request)
     {
-        // Validate the incoming request data
-        $credentials = [
-            'matric_number' => 'required|string',
-            'firstname' => 'required|string',
-        ];
 
         // Fetch the user by matric number
-        $user = User::where('matric_number', $credentials['matric_number'])->first();
+        $user = User::where('matric_number', $request->matric_number)->first();
 
         // Check if the user exists and the firstname matches
-        if ($user && $user->firstname === $credentials['firstname'] && Hash::check($credentials['matric_number'], $user->password)) {
+        if ($user && $user->name === $request->firstname && Hash::check($request->matric_number, $user->password)) {
             // Check if the user is a staff member
             $staff = Staff::where('user_id', $user->id)->first();
-
             if ($staff) {
                 // Manually log in the user
                 Auth::login($user);

@@ -12,7 +12,7 @@
 
     <div class="col-md-6">
         <label for="matric_number" class="form-label">Pass Key</label>
-        <input type="text" class="form-control" id="matric_number" name="pass_key" required>
+        <input type="text" class="form-control" id="matric_number" name="matric_number" required>
         <div class="invalid-feedback">
             Please provide your Pass key.
         </div>
