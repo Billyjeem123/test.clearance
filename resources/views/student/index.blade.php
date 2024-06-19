@@ -20,61 +20,24 @@
     <div class="row flex-nowrap">
 
         @include('student.includes.sidebar')
-
         <div class="col-md-9">
-
-
-            <div class="row progress-div-update">
-                <div class="col-md-3 unit-progress">
-                    <h4> Total Student </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
+            <div class="col-md-9">
+                <div class="row progress-div">
+                    <h2>Clearance Progress</h2>
+                    <div class="progress col-md-9">
+                        <div class="progress-bar w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="/assets/images/on-progress.png" alt="on-progress" class="on-progress">
+                    </div>
+                    <span>50% Complete</span>
                 </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Faculty Student </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-
 
             </div>
 
-
             <div class="col-md-12">
                 <h4 class="text-center mt-5">Clearance  List</h4>
-
                 <br>
-
                     <table id="units-table" class="display table table-striped table-bordered">
                         <thead>
                         <tr>

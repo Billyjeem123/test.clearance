@@ -75,38 +75,60 @@
 
                 <br>
 
-                <table id="units-table" class="display table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Unit Name</th>
-                        <th>Document Name</th>
-                        <th>Document Path</th>
-                        <th>Uploaded By</th>
-                        <th>Matric Number</th>
-                        <th>Clearance Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if($clearance)
-                        @foreach($clearance->documents as $document)
-                            <tr>
-                                <td>{{ $clearance->id }}</td>
-                                <td>{{ $clearance->unit_name }}</td>
-                                <td>{{ $document->names }}</td>
-                                <td><a href="{{ Storage::url($document->file_path) }}" target="_blank">View Document</a></td>
-                                <td>{{ $document->user->name }} ({{ $document->user->email }})</td>
-                                <td>{{ $document->user->matric_number }}</td>
-                                <td><a href="">View Status</a></td>
-                            </tr>
-                        @endforeach
-                    @else
+
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Staff Dashboard</title>
+                    <!-- Bootstrap CSS -->
+                    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+                </head>
+                <body>
+                <div class="container mt-5">
+                    <table id="units-table" class="display table table-striped table-bordered">
+                        <thead>
                         <tr>
-                            <td colspan="7">No documents found</td>
+                            <th>ID</th>
+                            <th>Unit Name</th>
+                            <th>Document ID</th>
+                            <th>Document Name</th>
+                            <th>Document Path</th>
+                            <th>Uploaded By</th>
+                            <th>Actions</th>
+                            <th>Clearance Status</th>
                         </tr>
-                    @endif
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @if($clearance)
+                            @foreach($clearance->documents as $document)
+                                <tr>
+                                    <td>{{ $clearance->id }}</td>
+                                    <td>{{ $clearance->unit_name }}</td>
+                                    <td>{{ $document->id }}</td>
+                                    <td>{{ $document->names }}</td>
+                                    <td><a href="{{ Storage::url($document->file_path) }}" target="_blank">View Document</a></td>
+                                    <td>{{ $document->user->name }} ({{ $document->user->email }})</td>
+                                    <td><a href="{{ route('document.approvalForm', $document->id) }}" class="btn btn-primary">View</a></td>
+                                    <td><a href="">View Status</a></td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="8">No documents found</td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bootstrap JS -->
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                </body>
+                </html>
+
+
 
 
             </div>
@@ -116,8 +138,48 @@
 
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Show the modal when the 'View' button is clicked
+            $('.view-document').on('click', function() {
+                var documentId = $(this).data('document-id');
+                $('#document_id').val(documentId);
+                $('#approvalModal').modal('show');
+            });
+
+            // Handle form submission
+            $('#approvalForm').on('submit', function(e) {
+                e.preventDefault();
+                var action = $(this).find('button[type=submit]:focus').val();
+                var comment = $('#comment').val();
+                var documentId = $('#document_id').val();
+
+                $.ajax({
+                    url: '{{ route("document.approval") }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        action: action,
+                        comment: comment,
+                        document_id: documentId
+                    },
+                    success: function(response) {
+                        alert('Document has been ' + action + 'd.');
+                        $('#approvalModal').modal('hide');
+                    },
+                    error: function(response) {
+                        alert('An error occurred.');
+                    }
+                });
+            });
+        });
+    </script>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+{{--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>--}}
 </body>
 </html>

@@ -141,8 +141,6 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'User deleted successfully');
     }
 
-
-
     public function logout(Request $request)
     {
         Auth::logout();
@@ -170,17 +168,12 @@ class AdminController extends Controller
         return view('admin.unassign_role', compact('staffs', 'roles'));
     }
 
-
-
-
-
     public function assignRole(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'unit_id' => 'required',
         ]);
-
 
         try {
             $staff = Staff::findOrFail($request->user_id);

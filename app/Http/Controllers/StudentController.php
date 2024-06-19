@@ -175,7 +175,7 @@ class StudentController extends Controller
             'document_names' => 'required|array',
             'document_names.*' => 'required|string',
             'documents' => 'required|array',
-            'documents.*' => 'required|file|mimes:pdf,doc,docx'
+            'documents.*' => 'required'
         ]);
 
         $unitId = $request->unit_id;
