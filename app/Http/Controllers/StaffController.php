@@ -24,13 +24,17 @@ class StaffController extends Controller
         $units = $user->units()->first();
 
         $clearance = Unit::with(['documents.user'])->findOrFail($units->id);
+        $approvedCount = $clearance->documents->where('status', 'approved')->count();
+        $pendingCount = $clearance->documents->where('status', 'pending')->count();
+        $disapprovedCount = $clearance->documents->where('status', 'disapproved')->count();
+        $totalCount = $clearance->documents->count();
 //
 //         echo "<pre>";
 //         echo json_encode($clearance, JSON_PRETTY_PRINT);
 //         ECHO "</pre>";
 
 
-        return view('staff.index', compact('clearance'));
+        return view('staff.index', compact('clearance', 'approvedCount', 'pendingCount', 'disapprovedCount',    'totalCount'));
     }
 
 
@@ -66,10 +70,8 @@ class StaffController extends Controller
         }
 
 
-
         // Find the document by ID
         $document = Document::findOrFail($documentId);
-
         // Update document status and comment
         $document->status = $approveStatus;
         $document->comment = $comment;
@@ -80,7 +82,8 @@ class StaffController extends Controller
         // Send email to the user
         Mail::to($user->email)->send(new DocumentStatusUpdated($document, $approveStatus));
 
- return redirect()->route('staff_dashboard')->with('status', 'Document has been ' . $approveStatus . '.'  . 'by'  . $document->unit->unit_name . '.'  );
+        return redirect()->route('staff_dashboard')->with('status', 'Document has been ' . $approveStatus . ' by ' . $document->unit->unit_name . '.');
+
     }
 
 

@@ -30,17 +30,17 @@
                 <div class="col-md-3 unit-progress">
                     <h4> Total Records </h4>
 
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
+                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> {{$totalCount}}</span>
                 </div>
                 <div class="col-md-3 unit-progress">
                     <h4> Pending  Records </h4>
 
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
+                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> {{$pendingCount}}</span>
                 </div>
                 <div class="col-md-3 unit-progress">
                     <h4> Approved Records </h4>
 
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
+                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> {{$approvedCount}}</span>
                 </div>
 
 
@@ -73,9 +73,8 @@
                             <th>Document Name</th>
                             <th>Document Path</th>
                             <th>Uploaded By</th>
-                            <th>Status</th>
-                            <th>Actions</th>
                             <th>Clearance Status</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -90,7 +89,6 @@
                                     <td>{{ $document->user->name }} ({{ $document->user->email }})</td>
                                     <td><a href="">{{$document->status}}</a></td>
                                     <td><a href="{{ route('document.approvalForm', $document->id) }}" class="btn btn-primary">View</a></td>
-                                    <td><a href="">View Status</a></td>
                                 </tr>
                             @endforeach
                         @else

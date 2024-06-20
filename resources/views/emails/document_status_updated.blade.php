@@ -5,6 +5,6 @@
     <title>Document Status Update</title>
 </head>
 <body>
-<p>Your document with name {{ $documentId }} has been {{ $status }}.</p>
+<p>Your document with name {{ $documentId }} has been {{ $status }}. by {{$unit_name}} Unit</p>
 </body>
 </html>

@@ -36,6 +36,7 @@ class DocumentStatusUpdated extends Mailable
             ->with([
                 'documentId' => $this->document->name,
                 'status' => $this->status,
+                'unit_name' => $this->document->unit->unit_name
             ])
             ->subject('Document Status Update');
     }
