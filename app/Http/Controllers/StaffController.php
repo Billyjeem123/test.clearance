@@ -80,7 +80,7 @@ class StaffController extends Controller
         // Send email to the user
         Mail::to($user->email)->send(new DocumentStatusUpdated($document, $approveStatus));
 
- return redirect()->route('staff_dashboard')->with('status', 'Document has been ' . $approveStatus . '.');
+ return redirect()->route('staff_dashboard')->with('status', 'Document has been ' . $approveStatus . '.'  . 'by'  . $document->unit->unit_name . '.'  );
     }
 
 
