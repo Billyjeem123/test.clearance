@@ -9,6 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('documents', function (Blueprint $table) {
@@ -17,12 +18,15 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('names');
             $table->string('file_path');
+            $table->enum('status', ['approved', 'disapproved', 'pending'])->default('pending');
+            $table->text('comment')->nullable();
             $table->timestamps();
 
-              $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

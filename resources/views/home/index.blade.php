@@ -10,7 +10,7 @@
             <h1 style="color: #3d6226;">From Freshers to Final Year.</h1>
             <h1 style="color: #3d6226;">Manage your University <br> Journey with Ease.</h1>
             <p style="color: black;">Tailored features for every stage, helping you excel academically.</p>
-            <button type="submit" class="btn  hero-btn" onclick=""><a href="{{route('register')}}"> Get Started</a></button>
+            <button type="submit" class="btn  hero-btn" onclick=""><a href="{{route('register_student')}}"> Get Started</a></button>
         </div>
         <div class="col-md-6">
             <img src="/assets/images/studentss.png" class="hero-img" alt="hero-img" style="width: 100%; margin-top: 1rem; height:100%;">
@@ -73,6 +73,7 @@
     <div class="row">
         <div class="col-md-6">
             <form class="login" method="post" action="">
+                @csrf
                 <h4>
                     Login as Student
                 </h4>
@@ -123,7 +124,7 @@
             <b><h2>Useful Links</h2></b>
             <ul>
                 <li><a href="">Clearance</a></li>
-                <li><a href="{{route('register')}}">Registration</a></li>
+                <li><a href="{{route('register_student')}}">Registration</a></li>
                 <li><a href="">Contact Us</a></li>
                 <li><a href="">Help</a></li>
             </ul>

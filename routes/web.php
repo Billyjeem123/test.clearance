@@ -20,9 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [StudentController::class, 'index'])->name('index');
-Route::get('/register', [StudentController::class, 'register'])->name('register');
+Route::get('/register/student', [StudentController::class, 'register'])->name('register_student');
 Route::post('/register', [StudentController::class, 'register_user'])->name('register_user');
-Route::get('/login', [StudentController::class, 'login'])->name('login');
+Route::get('/student/login', [StudentController::class, 'login'])->name('login');
 Route::get('/staff-login', [StudentController::class, 'staff_login'])->name('staff_login');
 Route::post('/login', [StudentController::class, 'login_user'])->name('login_user');
 Route::post('/process-staff-login', [StudentController::class, 'login_staff'])->name('login_staff');
@@ -63,11 +63,8 @@ Route::prefix('student')->middleware('auth.student')->group(function () {
 Route::prefix('staff')->middleware('auth.staff')->group(function () {
     Route::get('/', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
     Route::get('/submitted/documents', [StaffController::class, 'submitted_docs'])->name('submitted_docs');
-    Route::post('/document/approval', [StaffController::class, 'approveOrReject'])->name('document.approval');
-    Route::get('/staff/dashboard', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
-    Route::get('/staff/approve/{documentId}', [StaffController::class, 'showApprovalForm'])->name('document.approvalForm');
-    Route::post('/staff/approve', [StaffController::class, 'approveRejectDocument'])->name('document.approval');
-
+    Route::get('/approve/{documentId}', [StaffController::class, 'showApprovalForm'])->name('document.approvalForm');
+    Route::post('/approval', [StaffController::class, 'approveOrReject'])->name('document.approval');
 });
 
 

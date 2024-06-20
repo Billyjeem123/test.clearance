@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DocumentStatusUpdated;
 use App\Models\Document;
+use App\Models\Student;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class StaffController extends Controller
 {
@@ -14,7 +18,7 @@ class StaffController extends Controller
         $user = auth()->user();
         $staff = $user->staff;
 
-  #  Get the user associated with the staff
+        #  Get the user associated with the staff
         $user = $staff->user;
 
         $units = $user->units()->first();
@@ -26,32 +30,58 @@ class StaffController extends Controller
 //         ECHO "</pre>";
 
 
-        return view('staff.index', compact( 'clearance'));
+        return view('staff.index', compact('clearance'));
     }
 
 
+    public function submitted_docs()
+    {
+        $units = Unit::all();
 
-     public function  submitted_docs()
-     {
-         $units= Unit::all();
+        return view('staff.credentials', compact('units'));
+    }
 
-         return view('staff.credentials', compact('units'));
-            }
+//    public function approveOrReject()
+//    {
+// return "hhh";
+//    }
 
     public function approveOrReject(Request $request)
     {
         $documentId = $request->input('document_id');
         $action = $request->input('action');
-        $comment = $request->input('comment');
+        $comment = $request->input('comment', '');
+        $user_id = $request->input('user_id');
 
+        $approveStatus = "";
+
+        // Determine approval status based on action
+        if ($action === "approve") {
+            $approveStatus = "approved";
+        } elseif ($action === "reject") {
+            $approveStatus = "disapproved";
+        } else {
+            // Handle invalid action (though this should ideally be validated before this function is called)
+            return response()->json(['message' => 'Invalid action.'], 400);
+        }
+
+
+
+        // Find the document by ID
         $document = Document::findOrFail($documentId);
-        $document->status = $action;
+
+        // Update document status and comment
+        $document->status = $approveStatus;
         $document->comment = $comment;
         $document->save();
 
-        return response()->json(['message' => 'Document has been ' . $action . 'd.']);
-    }
+        // Find the user who owns the document
+        $user = User::find($user_id);
+        // Send email to the user
+        Mail::to($user->email)->send(new DocumentStatusUpdated($document, $approveStatus));
 
+ return redirect()->route('staff_dashboard')->with('status', 'Document has been ' . $approveStatus . '.');
+    }
 
 
     public function showApprovalForm($documentId)
@@ -60,18 +90,10 @@ class StaffController extends Controller
         return view('staff.manage_approval', compact('document'));
     }
 
-    public function approveRejectDocument(Request $request)
-    {
-        $request->validate([
-            'document_id' => 'required|exists:documents,id',
-            'comment' => 'required|string',
-            'action' => 'required|string|in:approve,reject',
-        ]);
 
-        $document = Document::findOrFail($request->document_id);
-        // Process approval/rejection logic here (e.g., update status in database)
 
-        return redirect()->route('staff_dashboard')->with('status', 'Document has been ' . $request->action . 'd.');
-    }
+
+
+
 
 }

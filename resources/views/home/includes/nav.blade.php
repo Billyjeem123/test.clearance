@@ -10,7 +10,7 @@
                     <a class="nav-link active" href="">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('register')}}">Registration</a>
+                    <a class="nav-link" href="/register/student">Registration</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Clearance</a>
@@ -31,7 +31,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('login') }}">Student Login</a></li>
-                            <li><a class="dropdown-item" href="{{ route('register') }}">Student Register</a></li>
+                            <li><a class="dropdown-item" href="{{ route('register_student') }}">Student Register</a></li>
                             <li><a class="dropdown-item" href="{{ route('staff_login') }}">Staff Login</a></li>
                         </ul>
                     @endif

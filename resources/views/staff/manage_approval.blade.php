@@ -38,6 +38,7 @@
     <form id="approvalForm" method="POST" action="{{ route('document.approval') }}">
         @csrf
         <input type="hidden" name="document_id" value="{{ $document->id }}">
+        <input type="text" name="user_id" value="{{ $document->user->id }}">
         <div class="form-group">
             <label for="comment">Comment</label>
             <textarea name="comment" id="comment" class="form-control" rows="4" required></textarea>

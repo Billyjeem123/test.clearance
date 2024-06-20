@@ -17,7 +17,7 @@ class StudentMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check() || Auth::user()->role !== 'student') {
-            return redirect()->route('login')->with('error', 'You must be logged in as a student to access this page.');
+            return redirect()->route('index')->with('error', 'You must be logged in as a student to access this page.');
         }
 
         return $next($request);

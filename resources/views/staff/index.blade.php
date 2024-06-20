@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css">
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
 
@@ -26,45 +28,21 @@
 
             <div class="row progress-div-update">
                 <div class="col-md-3 unit-progress">
-                    <h4> Total Student </h4>
+                    <h4> Total Records </h4>
 
                     <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
                 </div>
                 <div class="col-md-3 unit-progress">
-                    <h4> Faculty Student </h4>
+                    <h4> Pending  Records </h4>
 
                     <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
                 </div>
                 <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
+                    <h4> Approved Records </h4>
 
                     <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
                 </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
 
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
 
 
             </div>
@@ -92,10 +70,10 @@
                         <tr>
                             <th>ID</th>
                             <th>Unit Name</th>
-                            <th>Document ID</th>
                             <th>Document Name</th>
                             <th>Document Path</th>
                             <th>Uploaded By</th>
+                            <th>Status</th>
                             <th>Actions</th>
                             <th>Clearance Status</th>
                         </tr>
@@ -106,10 +84,11 @@
                                 <tr>
                                     <td>{{ $clearance->id }}</td>
                                     <td>{{ $clearance->unit_name }}</td>
-                                    <td>{{ $document->id }}</td>
                                     <td>{{ $document->names }}</td>
+
                                     <td><a href="{{ Storage::url($document->file_path) }}" target="_blank">View Document</a></td>
                                     <td>{{ $document->user->name }} ({{ $document->user->email }})</td>
+                                    <td><a href="">{{$document->status}}</a></td>
                                     <td><a href="{{ route('document.approvalForm', $document->id) }}" class="btn btn-primary">View</a></td>
                                     <td><a href="">View Status</a></td>
                                 </tr>
@@ -138,48 +117,26 @@
 
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+
+        <!-- Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+PmAzLB4v5BT8aHUXElmKUHitfK3I" crossorigin="anonymous"></script>
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            // Show the modal when the 'View' button is clicked
-            $('.view-document').on('click', function() {
-                var documentId = $(this).data('document-id');
-                $('#document_id').val(documentId);
-                $('#approvalModal').modal('show');
-            });
+        @if(Session::has('success'))
+        toastr.success("{{ Session::get('success') }}");
+        @endif
 
-            // Handle form submission
-            $('#approvalForm').on('submit', function(e) {
-                e.preventDefault();
-                var action = $(this).find('button[type=submit]:focus').val();
-                var comment = $('#comment').val();
-                var documentId = $('#document_id').val();
+        @if(Session::has('error'))
+        toastr.error("{{ Session::get('error') }}");
+        @endif
 
-                $.ajax({
-                    url: '{{ route("document.approval") }}',
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        action: action,
-                        comment: comment,
-                        document_id: documentId
-                    },
-                    success: function(response) {
-                        alert('Document has been ' + action + 'd.');
-                        $('#approvalModal').modal('hide');
-                    },
-                    error: function(response) {
-                        alert('An error occurred.');
-                    }
-                });
-            });
-        });
+
     </script>
 
 
-{{--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>--}}
 </body>
 </html>

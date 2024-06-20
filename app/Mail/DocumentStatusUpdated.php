@@ -32,12 +32,14 @@ class DocumentStatusUpdated extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.document_status_updated')
+        return $this->markdown('emails.document_status_updated')
             ->with([
-                'documentId' => $this->document->id,
+                'documentId' => $this->document->name,
                 'status' => $this->status,
-            ]);
+            ])
+            ->subject('Document Status Update');
     }
+
 
     /**
      * Get the message content definition.

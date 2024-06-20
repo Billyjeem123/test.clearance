@@ -9,13 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // database/migrations/xxxx_xx_xx_create_approvals_table.php
     public function up(): void
     {
         Schema::create('approvals', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('document_id');
+            $table->unsignedBigInteger('user_id'); // the user who approved or disapproved
+            $table->enum('status', ['approved', 'disapproved']);
+            $table->text('comment')->nullable();
             $table->timestamps();
+
+            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.
