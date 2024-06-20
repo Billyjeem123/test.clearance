@@ -9,7 +9,7 @@
             </li>
 
 
-            <li class="nav-item py-2 py-sm-0">
+            <li class="nav-item py-2 py-sm-0 d-none">
                 <a href="{{route('submitted_docs')}}" class="nav-link text-white" aria-current="page">
                     <img src="/assets/images/dashboard-icon.png" alt="dashboard-icon">
                     <span class="fs-4 ms-3 d-none d-sm-inline"> Submitted Credentials </span>

@@ -146,17 +146,41 @@ class StudentController extends Controller
         return view('home.staff_login');
     }
 
+
     public function student_dashboard()
     {
-         $unit = Unit::all();
+        // Get all units
+        $units = Unit::all();
 
+        // Retrieve clearance with documents filtered by user_id
         $clearance = Unit::with(['documents' => function ($query) {
             $query->where('user_id', Auth::id());
-        }]);
+        }])->get();
 
+        // Fetch documents associated with all units submitted by the user
+        $data = Unit::with(['documents.user'])
+            ->whereHas('documents', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->get();
 
-        return view('student.index', compact('unit', 'clearance'));
+        // Calculate progress percentage
+        $totalUnits = count($units);
+        $unitsWithDocuments = $data->count();
+        $progressPercentage = $totalUnits > 0 ? ($unitsWithDocuments / $totalUnits) * 100 : 0;
+
+        // Uncommented JSON output for debugging
+        // echo "<pre>";
+        // echo json_encode($data, JSON_PRETTY_PRINT);
+        // echo "</pre>";
+
+        return view('student.index', compact('units', 'clearance', 'data', 'progressPercentage'));
     }
+
+
+
+
+
 
     public function clearance_approval_unit($unit_id)
     {
@@ -181,6 +205,15 @@ class StudentController extends Controller
         $unitId = $request->unit_id;
         $documentNames = $request->document_names;
         $userId = Auth::id();
+
+        // Check if user has already submitted documents for this unit
+        $existingDocuments = Document::where('unit_id', $unitId)
+            ->where('user_id', $userId)
+            ->count();
+
+        if ($existingDocuments > 0) {
+            return redirect()->back()->with('error', 'Documents have already been submitted for this unit.');
+        }
 
         if (count($documentNames) != count($request->file('documents'))) {
             return redirect()->back()->with('error', 'Number of document names must match the number of uploaded files.');
