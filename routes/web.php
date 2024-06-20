@@ -56,6 +56,11 @@ Route::prefix('student')->middleware('auth.student')->group(function () {
     Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
     Route::post('/save/documents', [StudentController::class, 'save_documents'])->name('save_documents');
     Route::get('/logout', [AdminController::class, 'logout'])->name('student_logout');
+    Route::get('/all_docs', [StudentController::class, 'all_docs'])->name('all_docs');
+    Route::post('/future-docs', [StudentController::class, 'save_docs'])->name('future-docs.store');
+    Route::get('/download/{id}', [StudentController::class, 'download_docs'])->name('future-docs.download');
+    Route::get('/delete/{id}', [StudentController::class, 'delete_docs'])->name('delete_docs');
+
 });
 
 

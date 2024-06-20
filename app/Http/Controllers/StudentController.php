@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\FutureDocs;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Models\Unit;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
@@ -235,6 +237,7 @@ class StudentController extends Controller
 
 
 
+
     public function login_user(Request $request)
     {
         // Validate the incoming request data
@@ -255,8 +258,6 @@ class StudentController extends Controller
 
         return redirect()->back()->with('error', 'The provided credentials do not match our records.');
     }
-
-
 
     public function login_staff(Request $request)
     {
@@ -281,6 +282,70 @@ class StudentController extends Controller
         return redirect()->back()->with('error', 'The provided credentials do not match our records.');
     }
 
+    public function all_docs(){
 
+        $futureDocs = FutureDocs::where('user_id', Auth::id())->latest()->get();
+
+          return view('student.docs', ['futureDocs' => $futureDocs]);
+    }
+
+
+
+    public function save_docs(Request $request)
+    {
+        $file = $request->file('file');
+        $filePath = "";
+
+        if ($request->hasFile('file')) {
+            $filePath =    $this->uploadImage($request);
+        }
+
+        FutureDocs::create([
+            'name' => $request->name,
+            'file_path' => $filePath,
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('success', 'Document uploaded successfully.');
+    }
+
+    private function uploadImage($request): ?string
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName(); // Generate a unique name for the file
+            $file->storeAs('public/uploads', $fileName);
+            return asset('storage/uploads/' . $fileName);
+        }
+
+    }
+
+
+        // Download a specific future document
+    public function download_docs($id)
+    {
+        $futureDoc = FutureDocs::findOrFail($id);
+
+        // Check if user is authorized to download this document
+        if ($futureDoc->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if (!Storage::exists($futureDoc->file_path)) {
+            abort(404, 'File not found.');
+        }
+
+         return Storage::url($futureDoc->file_path);
+
+
+//        return Storage::download($futureDoc->file_path, $futureDoc->name);
+    }
+
+    public  function delete_docs($id)
+    {
+     FutureDocs::find($id)->delete();
+
+        return redirect()->back()->with('success', 'Document deleted successfully.');
+    }
 
 }

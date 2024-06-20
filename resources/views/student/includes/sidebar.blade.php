@@ -37,6 +37,14 @@
                 </ul>
             </li>
 
+
+            <li class="nav-item py-2 py-sm-0">
+                <a href="{{route('all_docs')}}" class="nav-link text-white" aria-current="page">
+                    <img src="/assets/images/dashboard-icon.png" alt="dashboard-icon">
+                    <span class="fs-4 ms-3 d-none d-sm-inline"> All Documents </span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>
