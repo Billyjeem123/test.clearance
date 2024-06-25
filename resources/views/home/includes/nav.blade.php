@@ -20,11 +20,29 @@
                         <a class="btn dropdown-toggle getstarted-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Dashboard
                         </a>
+
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="">Student Dashboard</a></li>
-                            <li><a class="dropdown-item" href="">Admin Dashboard</a></li>
-                            <li><a class="dropdown-item" href="{{route('logout')}}">Logout</a></li>
+
+                            @if (Auth::check())
+                                @switch(auth()->user()->role)
+                                    @case('staff')
+                                        <li><a class="dropdown-item" href="{{ route('staff_dashboard') }}">Staff Dashboard</a></li>
+                                        @break
+
+                                    @case('admin')
+                                        <li><a class="dropdown-item" href="{{ route('admin.index') }}">Admin Dashboard</a></li>
+                                        @break
+
+                                    @case('student')
+                                        <li><a class="dropdown-item" href="{{ route('student_dashboard') }}">Student Dashboard</a></li>
+                                        @break
+                                @endswitch
+                            @endif
+
+                            <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                         </ul>
+
+
                     @else
                         <a class="btn dropdown-toggle getstarted-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Sign Up

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DocumentSubmitted;
 use App\Models\Document;
 use App\Models\FutureDocs;
 use App\Models\Staff;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -193,6 +195,7 @@ class StudentController extends Controller
     }
 
 
+
     public function save_documents(Request $request)
     {
         // Validate the incoming request data
@@ -201,14 +204,18 @@ class StudentController extends Controller
             'document_names' => 'required|array',
             'document_names.*' => 'required|string',
             'documents' => 'required|array',
-            'documents.*' => 'required'
+            'documents.*' => 'required|file'
         ]);
+
+        $unit_id = $request->unit_id;
+
+
 
         $unitId = $request->unit_id;
         $documentNames = $request->document_names;
         $userId = Auth::id();
 
-        // Check if user has already submitted documents for this unit
+//        // Check if user has already submitted documents for this unit
         $existingDocuments = Document::where('unit_id', $unitId)
             ->where('user_id', $userId)
             ->count();
@@ -217,26 +224,71 @@ class StudentController extends Controller
             return redirect()->back()->with('error', 'Documents have already been submitted for this unit.');
         }
 
+        // Check if the number of document names matches the number of uploaded files
         if (count($documentNames) != count($request->file('documents'))) {
             return redirect()->back()->with('error', 'Number of document names must match the number of uploaded files.');
         }
 
-        foreach ($request->file('documents') as $index => $file) {
-            $filePath = $file->store('documents');
+        try {
+            // Upload documents using the reusable function
+            $uploadedFilePaths = $this->uploadImageMultiple($request->file('documents'));
 
-            Document::create([
-                'unit_id' => $unitId,
-                'user_id' => $userId,
-                'names' => $documentNames[$index],
-                'file_path' => $filePath
+            // Store each document in the database
+            foreach ($uploadedFilePaths as $index => $filePath) {
+                Document::create([
+                    'unit_id' => $unitId,
+                    'user_id' => $userId,
+                    'names' => $documentNames[$index],
+                    'file_path' => $filePath
+                ]);
+            }
+
+            $users = User::whereHas('units', function ($query) use ($unit_id) {
+                $query->where('unit_id', 5);
+            })->first();
+
+            # Send email notification to the unit
+            $this->sendDocumentSubmittedNotification($users);
+
+            return redirect()->back()->with('success', 'Documents uploaded successfully.');
+
+        } catch (\Exception $e) {
+            // Log or handle any exceptions that occur during file upload or database storage
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while uploading documents: ' . $e->getMessage()
             ]);
-        }
 
-        return redirect()->back()->with('success', 'Documents uploaded successfully.');
+//            return redirect()->back()->with('error', 'An error occurred while uploading documents'. $e->getMessage());
+        }
     }
 
+    private function uploadImageMultiple($files): array
+    {
+        $uploadedFilePaths = [];
 
+        foreach ($files as $file) {
+            if ($file->isValid()) {
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('public/uploads', $fileName); // Store in 'public/uploads' directory
+                $uploadedFilePaths[] = asset('storage/uploads/' . $fileName); // Generate public URL
+            } else {
+                // Handle invalid files here (if needed)
+                throw new \Exception('Invalid file encountered.');
+            }
+        }
 
+        return $uploadedFilePaths;
+    }
+
+    private function sendDocumentSubmittedNotification($unit)
+    {
+         $unitEmail = $unit->email; // Assuming the unit has an email attribute
+        $unitName = $unit->name; // Replace with actual attribute name if different
+
+        // Send email to unit
+        Mail::to($unitEmail)->send(new DocumentSubmitted($unitName));
+    }
 
     public function login_user(Request $request)
     {
@@ -289,8 +341,6 @@ class StudentController extends Controller
           return view('student.docs', ['futureDocs' => $futureDocs]);
     }
 
-
-
     public function save_docs(Request $request)
     {
         $file = $request->file('file');
@@ -318,10 +368,8 @@ class StudentController extends Controller
             return asset('storage/uploads/' . $fileName);
         }
 
-    }
+}
 
-
-        // Download a specific future document
     public function download_docs($id)
     {
         $futureDoc = FutureDocs::findOrFail($id);
@@ -338,7 +386,6 @@ class StudentController extends Controller
          return Storage::url($futureDoc->file_path);
 
 
-//        return Storage::download($futureDoc->file_path, $futureDoc->name);
     }
 
     public  function delete_docs($id)
@@ -347,5 +394,12 @@ class StudentController extends Controller
 
         return redirect()->back()->with('success', 'Document deleted successfully.');
     }
+
+
+        // Download a specific future document
+
+
+
+
 
 }

@@ -57,7 +57,7 @@
                                 <td>{{ $item['id'] }}</td>
                                 <td>{{ $item['unit_name'] }} Unit</td>
                                 <td>{{ $document['names'] }}</td>
-                                <td><a href="{{ Storage::url($document['file_path']) }}" target="_blank">View Document</a></td>
+                                <td><a href="{{ $document['file_path'] }}" target="_blank">View Document</a></td>
                                 <td><a href="">{{ $document['status'] }}</a></td>
                                 <td><a href="">{{ $document['comment'] ? $document['comment'] : 'pending' }}</a></td>
                                 <td><a href="{{ route('document.approvalForm', $document['id']) }}" class="btn btn-primary">View</a></td>
