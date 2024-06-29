@@ -33,7 +33,7 @@ class StaffController extends Controller
 //
 //         echo "<pre>";
 //         echo json_encode($clearance, JSON_PRETTY_PRINT);
-//         ECHO "</pre>";
+//        echo "</pre>";
 
 
         return view('staff.index', compact('clearance', 'approvedCount', 'pendingCount', 'disapprovedCount',    'totalCount'));
@@ -102,7 +102,7 @@ class StaffController extends Controller
 
             // Send email to the user
             $user = User::findOrFail($user_id);
-            Mail::to($user->email)->send(new DocumentStatusUpdated($document, $approveStatus));
+            Mail::to("billyhadiattaofeeq@gmail.com")->send(new DocumentStatusUpdated($document, $approveStatus));
 
             DB::commit();
 
@@ -152,40 +152,32 @@ class StaffController extends Controller
 //    }
 
 
+
     public function showApprovalForm($documentId)
     {
-//        $document = Document::with('user')->findOrFail($documentId);
-        $document = Document::with(['user', 'unit.requirements'])
-            ->findOrFail($documentId);
+        try {
+            $document = Document::with(['user', 'unit.requirements'])
+                ->findOrFail($documentId);
 
-//        echo "<pre>";
-//         echo json_encode($document, JSON_PRETTY_PRINT);
-//         echo "</pre>";
-        return view('staff.manage_approval', compact('document'));
-    }
+            // Get the user ID associated with the document
+            $user_id = $document->user->id;
 
+            // Fetch user requirements for the unit associated with the document
+            $unitId = $document->unit->id;
+            $userRequirements = UserRequirement::where('user_id', $user_id)
+                ->where('unit_id', $unitId)
+                ->whereIn('requirement_id', $document->unit->requirements->pluck('id'))
+                ->get();
 
-    public function saveRequirements(Request $request)
-    {
-        $userId = Auth::id();
-        $unitId = $request->input('unit_id');
-        $metRequirements = $request->input('requirements', []);
+            // Transform user requirements into an array of IDs for easier checking in the view
+            $userRequirementsIds = $userRequirements->pluck('requirement_id')->toArray();
 
-        // Delete existing entries for this user and unit
-        DB::table('user_requirements')->where('user_id', $userId)->where('unit_id', $unitId)->delete();
-
-        // Insert new entries for the met requirements
-        foreach ($metRequirements as $requirementId) {
-            DB::table('user_requirements')->insert([
-                'user_id' => $userId,
-                'unit_id' => $unitId,
-                'requirement_id' => $requirementId,
-                'is_met' => true
-            ]);
+            return view('staff.manage_approval', compact('document', 'userRequirementsIds'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error fetching document details.');
         }
-
-        return redirect()->back()->with('success', 'Requirements updated successfully!');
     }
+
 
 
 

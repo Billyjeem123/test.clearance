@@ -44,6 +44,7 @@
                         <th>ID</th>
                         <th>Unit Name</th>
                         <th>Document Name</th>
+                        <th>Reuploaded status</th>
                         <th>Document Path</th>
                         <th>Clearance Status</th>
                         <th>Clearance Comment</th>
@@ -57,10 +58,11 @@
                                 <td>{{ $item['id'] }}</td>
                                 <td>{{ $item['unit_name'] }} Unit</td>
                                 <td>{{ $document['names'] }}</td>
+                                <td>{{$document->is_reuploaded}}</td>
                                 <td><a href="{{ $document['file_path'] }}" target="_blank">View Document</a></td>
                                 <td><a href="">{{ $document['status'] }}</a></td>
                                 <td><a href="">{{ $document['comment'] ? $document['comment'] : 'pending' }}</a></td>
-                                <td><a href="{{ route('document.approvalForm', $document['id']) }}" class="btn btn-primary">View</a></td>
+                                <td><a href="{{ route('process_verification', $document['id']) }}" class="btn btn-primary">View</a></td>
                             </tr>
                         @endforeach
                     @empty

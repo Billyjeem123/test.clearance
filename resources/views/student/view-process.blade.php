@@ -42,30 +42,33 @@
 </head>
 <body>
 
-@include('staff.includes.nav')
+@include('student.includes.nav')
 
 
 <div class="container-fluid">
     <div class="row">
-        @include('staff.includes.sidebar')
+        @include('student.includes.sidebar')
         <div class="col-md-9">
             <!-- Main Content -->
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title">Steps for Document Approval</h2>
+                    <h2 class="card-title">Verification Results</h2>
                     <div class="alert alert-info" role="alert">
                         <h4 class="alert-heading">Important Note</h4>
-                        <p>Please select the checkbox for fields where the user has met the requirement and leave blank where the requirement is not met.</p>
+                        <p>Checked checkboxes indicate that the requirement has been met.  unchecked checkboxes  indicates requirement is pending.</p>
                     </div>
 
-                    <form id="approvalForm" method="POST" action="{{ route('document.approval') }}">
+
+                    <form id="approvalForm" method="POST" action="">
                         @csrf
                         <input type="hidden" name="document_id" value="{{ $document->id }}">
                         <input type="hidden" name="user_id" value="{{ $document->user->id }}">
 
                         <div class="form-group">
                             <label for="comment">Comment</label>
-                            <textarea name="comment" id="comment" class="form-control" rows="4" required></textarea>
+                            <textarea name="comment" id="comment" class="form-control" rows="4" required>{{$document['comment']}}</textarea>
+
+
                         </div>
 
                         <div class="form-group">
@@ -81,10 +84,9 @@
                             @endforeach
                         </div>
 
-                        <div class="form-group text-center">
-                            <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
-                            <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
-                        </div>
+                         <br>
+                        <H4>Verification Status: {{$document['status']}}</H4>
+
                     </form>
                 </div>
             </div>
@@ -93,7 +95,7 @@
 </div>
 
 
-@include('staff.includes.footer')
+@include('student.includes.footer')
 
 <script>
     function addDocumentField() {

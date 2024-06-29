@@ -61,6 +61,7 @@ Route::prefix('student')->middleware('auth.student')->group(function () {
     Route::post('/future-docs', [StudentController::class, 'save_docs'])->name('future-docs.store');
     Route::get('/download/{id}', [StudentController::class, 'download_docs'])->name('future-docs.download');
     Route::get('/delete/{id}', [StudentController::class, 'delete_docs'])->name('delete_docs');
+    Route::get('/requirement/{id}', [StudentController::class, 'process_verification'])->name('process_verification');
 
 });
 
@@ -72,6 +73,7 @@ Route::prefix('staff')->middleware('auth.staff')->group(function () {
     Route::get('/approve/{documentId}', [StaffController::class, 'showApprovalForm'])->name('document.approvalForm');
     Route::post('/approval', [StaffController::class, 'approveOrReject'])->name('document.approval');
     Route::post('/save_requirements', [StaffController::class, 'approveOrReject'])->name('save_requirements');
+
 });
 
 

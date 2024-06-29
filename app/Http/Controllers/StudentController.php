@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DocumentSubmissionNotification;
 use App\Mail\DocumentSubmitted;
 use App\Mail\StudentReg;
 use App\Models\Document;
@@ -10,6 +11,7 @@ use App\Models\Staff;
 use App\Models\Student;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\UserRequirement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -185,9 +187,9 @@ class StudentController extends Controller
         $progressPercentage1 = $totalUnits > 0 ? ($unitsWithDocuments / $totalUnits) * 100 : 0;
         $progressPercentage = round($progressPercentage1);
         // Uncommented JSON output for debugging
-        // echo "<pre>";
-        // echo json_encode($data, JSON_PRETTY_PRINT);
-        // echo "</pre>";
+//         echo "<pre>";
+//         echo json_encode($data, JSON_PRETTY_PRINT);
+//         echo "</pre>";
 
         return view('student.index', compact('units', 'clearance', 'data', 'progressPercentage'));
     }
@@ -215,7 +217,6 @@ class StudentController extends Controller
     }
 
 
-
     public function save_documents(Request $request)
     {
         // Validate the incoming request data
@@ -227,29 +228,19 @@ class StudentController extends Controller
             'documents.*' => 'required|file'
         ]);
 
-        $unit_id = $request->unit_id;
-
-
-
         $unitId = $request->unit_id;
         $documentNames = $request->document_names;
         $userId = Auth::id();
 
-//        // Check if user has already submitted documents for this unit
-        $existingDocuments = Document::where('unit_id', $unitId)
-            ->where('user_id', $userId)
-            ->count();
-
-        if ($existingDocuments > 0) {
-            return redirect()->back()->with('error', 'Documents have already been submitted for this unit.');
-        }
-
-        // Check if the number of document names matches the number of uploaded files
-        if (count($documentNames) != count($request->file('documents'))) {
-            return redirect()->back()->with('error', 'Number of document names must match the number of uploaded files.');
-        }
-
         try {
+            // Check if user has already submitted documents for this unit
+            $existingDocuments = Document::where('unit_id', $unitId)
+                ->where('user_id', $userId)
+                ->count();
+
+            // Determine if this is a re-upload scenario
+            $isReUpload = $existingDocuments > 0;
+
             // Upload documents using the reusable function
             $uploadedFilePaths = $this->uploadImageMultiple($request->file('documents'));
 
@@ -259,29 +250,101 @@ class StudentController extends Controller
                     'unit_id' => $unitId,
                     'user_id' => $userId,
                     'names' => $documentNames[$index],
-                    'file_path' => $filePath
+                    'file_path' => $filePath,
+                    'is_reuploaded' => $isReUpload ? 'reuploaded' : 'submitted' // Track if it's a re-upload
                 ]);
             }
 
-            $users = User::whereHas('units', function ($query) use ($unit_id) {
-                $query->where('unit_id', 5);
-            })->first();
+            // Notify the unit about the submission or re-upload
+            $unit = Unit::find($unitId);
+            if ($unit) {
+                $unit->users()->each(function ($user) use ($unit, $isReUpload) {
+                    // Example notification logic, adjust as per your application's needs
+                    $notificationMessage = $isReUpload
+                        ? "User {$user->name} has re-uploaded documents for unit {$unit->unit_name}."
+                        : "User {$user->name} has submitted documents for unit {$unit->unit_name}.";
 
-            # Send email notification to the unit
-//            $this->sendDocumentSubmittedNotification($users);
+                    // Send notification email or perform any other required actions
+                    Mail::to($user->email)->send(new DocumentSubmissionNotification($notificationMessage));
+                });
+            }
 
-            return redirect()->back()->with('success', 'Documents uploaded successfully.');
+            return redirect()->back()->with('success', 'Documents ' . ($isReUpload ? 're-' : '') . 'uploaded successfully.');
 
         } catch (\Exception $e) {
             // Log or handle any exceptions that occur during file upload or database storage
-            return response()->json([
-                'status' => 'error',
-                'message' => 'An error occurred while uploading documents: ' . $e->getMessage()
-            ]);
-
-//            return redirect()->back()->with('error', 'An error occurred while uploading documents'. $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while uploading documents: ' . $e->getMessage());
         }
     }
+
+
+
+//    public function save_documents(Request $request)
+//    {
+//        // Validate the incoming request data
+//        $request->validate([
+//            'unit_id' => 'required|exists:units,id',
+//            'document_names' => 'required|array',
+//            'document_names.*' => 'required|string',
+//            'documents' => 'required|array',
+//            'documents.*' => 'required|file'
+//        ]);
+//
+//        $unit_id = $request->unit_id;
+//
+//
+//
+//        $unitId = $request->unit_id;
+//        $documentNames = $request->document_names;
+//        $userId = Auth::id();
+//
+////        // Check if user has already submitted documents for this unit
+//        $existingDocuments = Document::where('unit_id', $unitId)
+//            ->where('user_id', $userId)
+//            ->count();
+//
+//        if ($existingDocuments > 0) {
+//            return redirect()->back()->with('error', 'Documents have already been submitted for this unit.');
+//        }
+//
+//        // Check if the number of document names matches the number of uploaded files
+//        if (count($documentNames) != count($request->file('documents'))) {
+//            return redirect()->back()->with('error', 'Number of document names must match the number of uploaded files.');
+//        }
+//
+//        try {
+//            // Upload documents using the reusable function
+//            $uploadedFilePaths = $this->uploadImageMultiple($request->file('documents'));
+//
+//            // Store each document in the database
+//            foreach ($uploadedFilePaths as $index => $filePath) {
+//                Document::create([
+//                    'unit_id' => $unitId,
+//                    'user_id' => $userId,
+//                    'names' => $documentNames[$index],
+//                    'file_path' => $filePath
+//                ]);
+//            }
+//
+//            $users = User::whereHas('units', function ($query) use ($unit_id) {
+//                $query->where('unit_id', 5);
+//            })->first();
+//
+//            # Send email notification to the unit
+////            $this->sendDocumentSubmittedNotification($users);
+//
+//            return redirect()->back()->with('success', 'Documents uploaded successfully.');
+//
+//        } catch (\Exception $e) {
+//            // Log or handle any exceptions that occur during file upload or database storage
+//            return response()->json([
+//                'status' => 'error',
+//                'message' => 'An error occurred while uploading documents: ' . $e->getMessage()
+//            ]);
+//
+////            return redirect()->back()->with('error', 'An error occurred while uploading documents'. $e->getMessage());
+//        }
+//    }
 
     private function uploadImageMultiple($files): array
     {
@@ -413,6 +476,34 @@ class StudentController extends Controller
         return redirect()->back()->with('success', 'Document deleted successfully.');
     }
 
+    public function process_verification($documentId)
+    {
+        try {
+            $document = Document::with(['user', 'unit.requirements'])
+                ->findOrFail($documentId);
+
+            // Get the user ID associated with the document
+            $user_id = $document->user->id;
+
+            // Fetch user requirements for the unit associated with the document
+            $unitId = $document->unit->id;
+            $userRequirements = UserRequirement::where('user_id', $user_id)
+                ->where('unit_id', $unitId)
+                ->whereIn('requirement_id', $document->unit->requirements->pluck('id'))
+                ->get();
+
+            // Transform user requirements into an array of IDs for easier checking in the view
+            $userRequirementsIds = $userRequirements->pluck('requirement_id')->toArray();
+
+            return view('student.view-process', compact('document', 'userRequirementsIds'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error fetching document details.');
+        }
+    }
+
+
+        // Download a specific future document
+
     private function sendDocumentSubmittedNotification($unit)
     {
          $unitEmail = $unit->email; // Assuming the unit has an email attribute
@@ -421,12 +512,6 @@ class StudentController extends Controller
         // Send email to unit
         Mail::to($unitEmail)->send(new DocumentSubmitted($unitName));
     }
-
-
-        // Download a specific future document
-
-
-
 
 
 }

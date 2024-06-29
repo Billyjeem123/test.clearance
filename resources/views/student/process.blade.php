@@ -90,7 +90,7 @@
                                 </div>
                             </div>
 
-                            <button type="button" class="btn btn-secondary" onclick="addDocumentField()">Add Another Document</button>
+                            <button type="button" class="btn btn-secondary d-none" onclick="addDocumentField()">Add Another Document</button>
                             <button type="submit" class="btn btn-primary">Upload Docs</button>
                         </form>
                     </div>

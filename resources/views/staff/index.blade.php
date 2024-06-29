@@ -71,7 +71,8 @@
                             <th>ID</th>
                             <th>Unit Name</th>
                             <th>Document Name</th>
-                            <th>Document Path</th>
+                            <th>Document Path
+                             <th>Reuploaded status</th>
                             <th>Uploaded By</th>
                             <th>Clearance Status</th>
                             <th>Actions</th>
@@ -86,6 +87,7 @@
                                     <td>{{ $document->names }}</td>
 
                                     <td><a href="{{ Storage::url($document->file_path) }}" target="_blank">View Document</a></td>
+                                    <td>{{$document->is_reuploaded}}</td>
                                     <td>{{ $document->user->name }} ({{ $document->user->email }})</td>
                                     <td><a href="">{{$document->status}}</a></td>
                                     <td><a href="{{ route('document.approvalForm', $document->id) }}" class="btn btn-primary">View</a></td>
