@@ -44,53 +44,95 @@
 
 @include('student.includes.nav')
 
+
 <div class="container-fluid">
     <div class="row flex-nowrap">
         @include('student.includes.sidebar')
 
         <div class="col-md-9">
-            <div class="form-section">
-                <form action="{{route('save_documents')}}" method="post" class="p-4 border rounded shadow-sm bg-white" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="unit_id" value="{{ $unit->id }}">
-                    <h4 class="mb-4 text-center">Upload {{ $unit->unit_name }} Verification Docs</h4>
-
-                    <div id="document-uploads">
-                        <div class="document-upload mb-3">
-                            <label for="document_names" class="form-label">Document Name</label>
-                            <input type="text" class="form-control" name="document_names[]" placeholder="Enter document name" required>
-
-                            <label for="documents" class="form-label">Document File</label>
-                            <input type="file" class="form-control" name="documents[]" required>
+            <div class="row">
+                <!-- Requirements Column -->
+                <div class="col-md-6">
+                    <span>Steps it takes to be cleared</span>
+                    <div class="steps">
+                        <div class="alert alert-info" role="alert">
+                            <h4 class="alert-heading">Important Note</h4>
+                            <p>All documents must be attached as a single PDF file for verification. Please ensure each section is appropriately named.</p>
                         </div>
+
+                        <h4 class="mb-3">Steps to be Cleared:</h4>
+                        <ul class="list-group">
+                            @foreach($unit->requirements as $requirement)
+                                <li class="list-group-item d-flex align-items-center">
+                                    <img src="{{ asset('assets/images/empty.jpeg') }}" alt="Requirement Icon" class="me-2" style="width: 20px;">
+                                    {{ $requirement->requirement }}
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
+                </div>
 
-                    <button type="button" class="btn btn-secondary d-none" onclick="addDocumentField()">Add Another Document</button>
-                    <button type="submit" class="btn btn-primary">Upload Docs</button>
-                </form>
+                <!-- Form Column -->
+                <div class="col-md-6">
+                    <div class="form-section">
+                        <form action="{{ route('save_documents') }}" method="post" class="p-4 border rounded shadow-sm bg-white" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="unit_id" value="{{ $unit->id }}">
+                            <h4 class="mb-4 text-center">Upload {{ $unit->unit_name }} Verification Docs</h4>
 
-                <script>
-                    function addDocumentField() {
-                        const uploadContainer = document.getElementById('document-uploads');
-                        const newUpload = document.createElement('div');
-                        newUpload.classList.add('document-upload', 'mb-3');
-                        newUpload.innerHTML = `
+                            <div id="document-uploads">
+                                <div class="document-upload mb-3">
+                                    <label for="document_names" class="form-label">Document Name</label>
+                                    <input type="text" class="form-control" name="document_names[]" placeholder="Enter document name" required>
+
+                                    <label for="documents" class="form-label">Document File</label>
+                                    <input type="file" class="form-control" name="documents[]" required>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-secondary" onclick="addDocumentField()">Add Another Document</button>
+                            <button type="submit" class="btn btn-primary">Upload Docs</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@include('admin.includes.footer')
+
+<script>
+    function addDocumentField() {
+        const uploadContainer = document.getElementById('document-uploads');
+        const newUpload = document.createElement('div');
+        newUpload.classList.add('document-upload', 'mb-3');
+        newUpload.innerHTML = `
             <label for="document_names" class="form-label">Document Name</label>
             <input type="text" class="form-control" name="document_names[]" placeholder="Enter document name" required>
 
             <label for="documents" class="form-label">Document File</label>
             <input type="file" class="form-control" name="documents[]" required>
         `;
-                        uploadContainer.appendChild(newUpload);
-                    }
-                </script>
+        uploadContainer.appendChild(newUpload);
+    }
+</script>
 
-            </div>
-
-
-        </div>
-    </div>
-</div>
+<style>
+    .steps {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .steps p {
+        display: flex;
+        align-items: center;
+    }
+    .steps p img {
+        margin-right: 10px;
+    }
+</style>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">

@@ -29,24 +29,62 @@ class AdminController extends Controller
         return view('admin.show_unit');
     }
 
-
-
-
     public function create_unit(Request $request)
     {
         // Validate the request data
         $request->validate([
             'unit_name' => 'required|string|max:255',
+            'requirements' => 'nullable|array',
+            'requirements.*' => 'nullable|string|max:255',
         ]);
 
-        // Create a new unit
-        Unit::create([
-            'unit_name' => $request->unit_name,
-        ]);
+        DB::beginTransaction();
 
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Unit created successfully!');
+        try {
+            // Check if the unit already exists
+            $existingUnit = Unit::where('unit_name', $request->unit_name)->first();
+            if ($existingUnit) {
+                return redirect()->back()->with('error', 'A unit with this name already exists.');
+            }
+
+            // Create a new unit
+            $unit = Unit::create([
+                'unit_name' => $request->unit_name,
+            ]);
+
+            // Save the requirements
+            if ($request->has('requirements')) {
+                foreach ($request->requirements as $requirement) {
+                    if (!empty($requirement)) {
+                        // Sanitize the requirement to escape special characters
+                        $sanitizedRequirement = htmlspecialchars($requirement, ENT_QUOTES, 'UTF-8');
+
+                        $unit->requirements()->create([
+                            'requirement' => $sanitizedRequirement,
+                        ]);
+                    }
+                }
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            // Redirect back with a success message
+            return redirect()->back()->with('success', 'Unit created successfully!');
+
+        } catch (\Exception $e) {
+            // Rollback the transaction
+            DB::rollBack();
+
+            // Redirect back with an error message
+            return  response()->json(['error' => $e->getMessage()]);
+//            return redirect()->back()->with('error', 'An error occurred while creating the unit. Please try again.');
+        }
     }
+
+
+
+
 
     public function show_all_units()
     {

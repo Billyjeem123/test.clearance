@@ -28,7 +28,8 @@ Route::post('/login', [StudentController::class, 'login_user'])->name('login_use
 Route::post('/process-staff-login', [StudentController::class, 'login_staff'])->name('login_staff');
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
-Route::prefix('admin')->middleware('auth.staff')->group(function () {
+//Route::prefix('admin')->middleware('auth.admin')->group(function ()
+    Route::prefix('admin')->middleware('auth.staff')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/register', [AdminController::class, 'register'])->name('admin.login');
     Route::get('/unit', [AdminController::class, 'show_unit'])->name('show_unit');
@@ -70,6 +71,7 @@ Route::prefix('staff')->middleware('auth.staff')->group(function () {
     Route::get('/submitted/documents', [StaffController::class, 'submitted_docs'])->name('submitted_docs');
     Route::get('/approve/{documentId}', [StaffController::class, 'showApprovalForm'])->name('document.approvalForm');
     Route::post('/approval', [StaffController::class, 'approveOrReject'])->name('document.approval');
+    Route::post('/save_requirements', [StaffController::class, 'approveOrReject'])->name('save_requirements');
 });
 
 

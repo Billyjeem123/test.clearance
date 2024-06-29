@@ -28,6 +28,11 @@ class Unit extends Model
         return $this->belongsToMany(User::class, 'role_staff', 'unit_id', 'user_id');
     }
 
+    public function requirements()
+    {
+        return $this->hasMany(UnitRequirement::class);
+    }
+
 
 
 }

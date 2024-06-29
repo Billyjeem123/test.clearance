@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\DocumentSubmitted;
+use App\Mail\StudentReg;
 use App\Models\Document;
 use App\Models\FutureDocs;
 use App\Models\Staff;
@@ -12,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -98,6 +100,8 @@ class StudentController extends Controller
         // Log in the newly registered user
         Auth::login($user);
 
+        Mail::to($request->student_email)->send(new StudentReg($matricNumber));
+
         // Redirect the user after successful registration
         return redirect()->route('student_dashboard')->with('success', 'Registration successful!');
     }
@@ -168,11 +172,18 @@ class StudentController extends Controller
             })
             ->get();
 
+        $percentageCount = Unit::with(['documents.user'])
+            ->whereHas('documents', function ($query) {
+                $query->where('user_id', Auth::id())
+                    ->where('status', 'approved');
+            })
+            ->get();
+
         // Calculate progress percentage
         $totalUnits = count($units);
-        $unitsWithDocuments = $data->count();
-        $progressPercentage = $totalUnits > 0 ? ($unitsWithDocuments / $totalUnits) * 100 : 0;
-
+        $unitsWithDocuments = $percentageCount->count();
+        $progressPercentage1 = $totalUnits > 0 ? ($unitsWithDocuments / $totalUnits) * 100 : 0;
+        $progressPercentage = round($progressPercentage1);
         // Uncommented JSON output for debugging
         // echo "<pre>";
         // echo json_encode($data, JSON_PRETTY_PRINT);
@@ -189,7 +200,16 @@ class StudentController extends Controller
     public function clearance_approval_unit($unit_id)
     {
 
-        $unit  = Unit::find($unit_id);
+//        $unit  = Unit::find($unit_id);
+////        $unit = Unit::with('requirements')->find($unit_id)->get();
+//
+//        echo "<pre";
+//        echo json_encode($unit, JSON_PRETTY_PRINT);
+//        echo  "</pre>";
+
+        // Fetch the unit along with its requirements
+        $unit = Unit::with('requirements')->find($unit_id);
+
 
         return view('student.process', compact('unit'));
     }
@@ -248,7 +268,7 @@ class StudentController extends Controller
             })->first();
 
             # Send email notification to the unit
-            $this->sendDocumentSubmittedNotification($users);
+//            $this->sendDocumentSubmittedNotification($users);
 
             return redirect()->back()->with('success', 'Documents uploaded successfully.');
 
@@ -279,15 +299,6 @@ class StudentController extends Controller
         }
 
         return $uploadedFilePaths;
-    }
-
-    private function sendDocumentSubmittedNotification($unit)
-    {
-         $unitEmail = $unit->email; // Assuming the unit has an email attribute
-        $unitName = $unit->name; // Replace with actual attribute name if different
-
-        // Send email to unit
-        Mail::to($unitEmail)->send(new DocumentSubmitted($unitName));
     }
 
     public function login_user(Request $request)
@@ -322,10 +333,17 @@ class StudentController extends Controller
             // Check if the user is a staff member
             $staff = Staff::where('user_id', $user->id)->first();
             if ($staff) {
-                // Manually log in the user
-                Auth::login($user);
 
-                return redirect()->route('staff_dashboard');
+                $roleStaff = DB::table('role_staff')->where('user_id', $user->id)->first();
+                if ($roleStaff) {
+                    // Manually log in the user
+                    Auth::login($user);
+
+                    return redirect()->route('staff_dashboard');
+                } else {
+                    return redirect()->back()->with('error', 'The staff is currently not appointed to head a unit.');
+                }
+
             } else {
                 return redirect()->back()->with('error', 'The provided credentials do not match our records.');
             }
@@ -393,6 +411,15 @@ class StudentController extends Controller
      FutureDocs::find($id)->delete();
 
         return redirect()->back()->with('success', 'Document deleted successfully.');
+    }
+
+    private function sendDocumentSubmittedNotification($unit)
+    {
+         $unitEmail = $unit->email; // Assuming the unit has an email attribute
+        $unitName = $unit->name; // Replace with actual attribute name if different
+
+        // Send email to unit
+        Mail::to($unitEmail)->send(new DocumentSubmitted($unitName));
     }
 
 
