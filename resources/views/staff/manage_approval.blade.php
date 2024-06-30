@@ -73,13 +73,14 @@
                             @foreach($document->unit->requirements as $requirement)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="requirements[]" value="{{ $requirement->id }}" id="requirement{{ $requirement->id }}"
-                                        {{ in_array($requirement->id, $userRequirementsIds) ? 'checked' : '' }}>
+                                           @if(isset($userRequirementsStatus[$requirement->id]) && $userRequirementsStatus[$requirement->id] == 1) checked @endif>
                                     <label class="form-check-label" for="requirement{{ $requirement->id }}">
                                         {{ $requirement->requirement }}
                                     </label>
                                 </div>
                             @endforeach
                         </div>
+
 
                         <div class="form-group text-center">
                             <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>

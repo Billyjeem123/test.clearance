@@ -476,6 +476,34 @@ class StudentController extends Controller
         return redirect()->back()->with('success', 'Document deleted successfully.');
     }
 
+//    public function process_verification($documentId)
+//    {
+//        try {
+//            $document = Document::with(['user', 'unit.requirements'])
+//                ->findOrFail($documentId);
+//
+//            // Get the user ID associated with the document
+//            $user_id = $document->user->id;
+//
+//            // Fetch user requirements for the unit associated with the document
+//            $unitId = $document->unit->id;
+//            $userRequirements = UserRequirement::where('user_id', $user_id)
+//                ->where('unit_id', $unitId)
+//                ->whereIn('requirement_id', $document->unit->requirements->pluck('id'))
+//                ->get();
+//
+//            // Transform user requirements into an array of IDs for easier checking in the view
+//            $userRequirementsIds = $userRequirements->pluck('requirement_id')->toArray();
+//            $userRequirementsStatus = $userRequirements->pluck('is_met', 'requirement_id')->toArray();
+////
+//
+//            return view('student.view-process', compact('document', 'userRequirementsIds'));
+//        } catch (\Exception $e) {
+//            return redirect()->back()->with('error', 'Error fetching document details.');
+//        }
+//    }
+
+
     public function process_verification($documentId)
     {
         try {
@@ -492,14 +520,15 @@ class StudentController extends Controller
                 ->whereIn('requirement_id', $document->unit->requirements->pluck('id'))
                 ->get();
 
-            // Transform user requirements into an array of IDs for easier checking in the view
-            $userRequirementsIds = $userRequirements->pluck('requirement_id')->toArray();
+            // Transform user requirements into an array with requirement_id as key and is_met as value
+            $userRequirementsStatus = $userRequirements->pluck('is_met', 'requirement_id')->toArray();
 
-            return view('student.view-process', compact('document', 'userRequirementsIds'));
+            return view('student.view-process', compact('document', 'userRequirementsStatus'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error fetching document details.');
         }
     }
+
 
 
         // Download a specific future document

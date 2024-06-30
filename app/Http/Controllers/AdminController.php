@@ -29,6 +29,29 @@ class AdminController extends Controller
         return view('admin.show_unit');
     }
 
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('uname', 'pass');
+
+        if ($credentials['uname'] === 'admin_codes@gmail.com' && $credentials['pass'] === '$password') {
+            // Check if the user exists in the database (if necessary)
+            $user = \App\Models\User::where('email', 'admin_codes@gmail.com')->first();
+
+            if ($user) {
+                Auth::login($user);
+
+                // Redirect to staff dashboard
+                return redirect()->route('admin.index');
+            }
+        }
+
+        // Redirect back with error message if credentials are incorrect
+        return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
+    }
+
+
+
     public function create_unit(Request $request)
     {
         // Validate the request data

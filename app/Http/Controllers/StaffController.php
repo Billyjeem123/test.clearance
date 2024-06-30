@@ -102,7 +102,7 @@ class StaffController extends Controller
 
             // Send email to the user
             $user = User::findOrFail($user_id);
-            Mail::to("billyhadiattaofeeq@gmail.com")->send(new DocumentStatusUpdated($document, $approveStatus));
+            Mail::to($user->email)->send(new DocumentStatusUpdated($document, $approveStatus));
 
             DB::commit();
 
@@ -169,14 +169,15 @@ class StaffController extends Controller
                 ->whereIn('requirement_id', $document->unit->requirements->pluck('id'))
                 ->get();
 
-            // Transform user requirements into an array of IDs for easier checking in the view
-            $userRequirementsIds = $userRequirements->pluck('requirement_id')->toArray();
+            // Transform user requirements into an array with requirement_id as the key and is_met as the value
+            $userRequirementsStatus = $userRequirements->pluck('is_met', 'requirement_id')->toArray();
 
-            return view('staff.manage_approval', compact('document', 'userRequirementsIds'));
+            return view('staff.manage_approval', compact('document', 'userRequirementsStatus'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error fetching document details.');
         }
     }
+
 
 
 

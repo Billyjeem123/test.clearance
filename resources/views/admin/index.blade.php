@@ -12,49 +12,14 @@
 
 
             <div class="row progress-div-update">
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Library </h4>
-
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark"><span> Cleared</span>
-                </div>
-                <div class="col-md-3 unit-progress">
-                    <h4> Department </h4>
-
-                    <img src="/assets/images/exclamation-mark.png" alt="tick-mark"><span> Not Cleared</span>
-                </div>
-
-
+                @foreach($units as $unit)
+                    <div class="col-md-3 unit-progress">
+                        <h4>{{ $unit->unit_name }} Unit </h4>
+                        <img src="/assets/images/tick-mark.png" alt="tick-mark">
+                    </div>
+                @endforeach
             </div>
+
 
 
 

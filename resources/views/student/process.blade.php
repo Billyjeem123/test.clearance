@@ -53,14 +53,14 @@
             <div class="row">
                 <!-- Requirements Column -->
                 <div class="col-md-6">
-                    <span>Steps it takes to be cleared</span>
+                    <span>Steps to be Cleared for: {{ $unit->unit_name }} Verification Unit</span>
                     <div class="steps">
                         <div class="alert alert-info" role="alert">
                             <h4 class="alert-heading">Important Note</h4>
                             <p>All documents must be attached as a single PDF file for verification. Please ensure each section is appropriately named.</p>
                         </div>
 
-                        <h4 class="mb-3">Steps to be Cleared:</h4>
+                        <h4 class="mb-3">Steps to be Cleared</h4>
                         <ul class="list-group">
                             @foreach($unit->requirements as $requirement)
                                 <li class="list-group-item d-flex align-items-center">

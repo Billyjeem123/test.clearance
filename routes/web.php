@@ -27,9 +27,12 @@ Route::get('/staff-login', [StudentController::class, 'staff_login'])->name('sta
 Route::post('/login', [StudentController::class, 'login_user'])->name('login_user');
 Route::post('/process-staff-login', [StudentController::class, 'login_staff'])->name('login_staff');
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::view('/admin/login', 'admin.admin_login')->name('admin_login');
+Route::post('/admin_login', [AdminController::class, 'login'])->name('admin_login_dash');
+
 
 //Route::prefix('admin')->middleware('auth.admin')->group(function ()
-    Route::prefix('admin')->middleware('auth.staff')->group(function () {
+    Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/register', [AdminController::class, 'register'])->name('admin.login');
     Route::get('/unit', [AdminController::class, 'show_unit'])->name('show_unit');
@@ -52,7 +55,7 @@ Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 });
 
 
-Route::prefix('student')->middleware('auth.student')->group(function () {
+Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('/', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
     Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
     Route::post('/save/documents', [StudentController::class, 'save_documents'])->name('save_documents');
@@ -67,7 +70,7 @@ Route::prefix('student')->middleware('auth.student')->group(function () {
 
 
 
-Route::prefix('staff')->middleware('auth.staff')->group(function () {
+Route::prefix('staff')->middleware('auth')->group(function () {
     Route::get('/', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
     Route::get('/submitted/documents', [StaffController::class, 'submitted_docs'])->name('submitted_docs');
     Route::get('/approve/{documentId}', [StaffController::class, 'showApprovalForm'])->name('document.approvalForm');

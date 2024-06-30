@@ -72,7 +72,7 @@
                             <th>Unit Name</th>
                             <th>Document Name</th>
                             <th>Document Path
-                             <th>Reuploaded status</th>
+                             <th>Uploaded status</th>
                             <th>Uploaded By</th>
                             <th>Clearance Status</th>
                             <th>Actions</th>

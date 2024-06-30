@@ -44,7 +44,7 @@
                         <th>ID</th>
                         <th>Unit Name</th>
                         <th>Document Name</th>
-                        <th>Reuploaded status</th>
+                        <th>Uploaded status</th>
                         <th>Document Path</th>
                         <th>Clearance Status</th>
                         <th>Clearance Comment</th>
