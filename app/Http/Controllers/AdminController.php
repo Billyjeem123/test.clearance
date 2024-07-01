@@ -196,7 +196,7 @@ class AdminController extends Controller
 
     public function destroy_users($id)
     {
-        $unit = Staff::findOrFail($id);
+        $unit = User::findOrFail($id);
         $unit->delete();
 
         return redirect()->back()->with('success', 'User deleted successfully');
