@@ -390,7 +390,7 @@ class StudentController extends Controller
             // Manually log in the user
             Auth::login($user);
 
-            return redirect()->route('student_dashboard');
+            return redirect()->route('student_index');
         }
 
         return redirect()->back()->with('error', 'The provided credentials do not match our records.');
