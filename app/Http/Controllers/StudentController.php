@@ -28,6 +28,17 @@ class StudentController extends Controller
          return view('home.index');
      }
 
+    public function student_index(){
+
+        $all_student =    User::with('student')->where('id', Auth::id())->first();
+//         echo "<pre>";
+//         echo json_encode($all_student, JSON_PRETTY_PRINT);
+//         echo "</pre>";
+
+        return view('student.index', ['student' => $all_student]);
+    }
+
+
     public function register(){
 
         return view('home.register');
@@ -191,7 +202,7 @@ class StudentController extends Controller
 //         echo json_encode($data, JSON_PRETTY_PRINT);
 //         echo "</pre>";
 
-        return view('student.index', compact('units', 'clearance', 'data', 'progressPercentage'));
+        return view('student.clearance', compact('units', 'clearance', 'data', 'progressPercentage'));
     }
 
 

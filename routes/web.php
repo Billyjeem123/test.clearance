@@ -58,7 +58,8 @@ Route::get('/student_profile/{id}', [AdminController::class, 'profile'])->name('
 
 
 Route::prefix('student')->middleware('auth')->group(function () {
-    Route::get('/', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
+    Route::get('/', [StudentController::class, 'student_index'])->name('student_index');
+    Route::get('/clearance', [StudentController::class, 'student_dashboard'])->name('student_dashboard');
     Route::get('/clearance-unit/{unit_id}', [StudentController::class, 'clearance_approval_unit'])->name('clearance_approval_unit');
     Route::post('/save/documents', [StudentController::class, 'save_documents'])->name('save_documents');
     Route::get('/logout', [AdminController::class, 'logout'])->name('student_logout');
@@ -72,13 +73,14 @@ Route::prefix('student')->middleware('auth')->group(function () {
 
 
 
-Route::prefix('staff')->middleware('auth')->group(function () {
+Route::prefix('staff')->middleware('auth.staff')->group(function () {
     Route::get('/', [StaffController::class, 'index'])->name('staff.index');
     Route::get('/clearance', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
     Route::get('/submitted/documents', [StaffController::class, 'submitted_docs'])->name('submitted_docs');
     Route::get('/approve/{documentId}', [StaffController::class, 'showApprovalForm'])->name('document.approvalForm');
     Route::post('/approval', [StaffController::class, 'approveOrReject'])->name('document.approval');
     Route::post('/save_requirements', [StaffController::class, 'approveOrReject'])->name('save_requirements');
+    Route::get('/staff_student_profile/{id}', [StaffController::class, 'student_profile'])->name('student_profile');
 
 });
 

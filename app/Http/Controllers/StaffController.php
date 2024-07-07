@@ -34,6 +34,30 @@ class StaffController extends Controller
 
 
 
+
+    public function student_profile ($id) {
+        // Retrieve the student along with their related data
+        $student = User::with('student')->find($id);
+
+        // Check if the student exists
+        if (!$student) {
+            // Handle the case where the student is not found
+            // You can redirect to a 404 page or another appropriate response
+            return redirect()->back()->with('error', 'Student not found.');
+        }
+
+//                echo "<pre>";
+//        echo json_encode( $student,JSON_PRETTY_PRINT);
+//        echo "</pre>";
+
+        // Return the view with the student's data
+        return view('staff.student_profile', ['student' => $student]);
+    }
+
+
+
+
+
     public function staff_dashboard()
     {
         $user = auth()->user();

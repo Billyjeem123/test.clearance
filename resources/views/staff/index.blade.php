@@ -66,7 +66,7 @@
                                 <td>{{ $student['student']['college_name'] }}</td>
                                 <td>{{ $student['student']['student_dob'] }}</td>
                                 <td>
-                                    <a href="{{route('profile', $student['id'])}}">
+                                    <a href="{{route('student_profile', $student['id'])}}">
                                         <button class="btn btn-primary">View</button>
                                     </a>
                                 </td>

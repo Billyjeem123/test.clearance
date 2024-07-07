@@ -1,9 +1,9 @@
-@include('student.includes.header')
-@include('student.includes.nav')
+@include('staff.includes.header')
+@include('staff.includes.nav')
 
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        @include('student.includes.sidebar')
+        @include('staff.includes.sidebar')
 
         <div class="col-md-9">
             <div class="col-md-6 offset-md-3">
@@ -75,7 +75,7 @@
     </div>
 </div>
 
-@include('student.includes.footer')
+@include('staff.includes.footer')
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
