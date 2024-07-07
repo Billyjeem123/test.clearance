@@ -145,7 +145,11 @@ class AdminController extends Controller
 
     public function show_all_units()
     {
-        $units = Unit::all();
+        $units = Unit::with('requirements')->get();
+//        echo "<pre>";
+//        echo json_encode($units, JSON_PRETTY_PRINT);
+//        echo "</pre>";
+
         return view('admin.unit_list', compact('units'));
     }
 

@@ -11,11 +11,12 @@
 
             <br>
 
-            <table id="units-table" class="display table table-striped table-bordered">
+            <table id="example" class="display table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Unit Name</th>
+                    <th>Requirements</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -24,6 +25,13 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $unit->unit_name }}</td>
+                        <td>
+                            <ul>
+                                @foreach($unit->requirements as $requirement)
+                                    <li>{{ $requirement->requirement }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
                         <td>
                             <form action="{{ route('destroy_unit', $unit->id) }}" method="POST">
                                 @csrf
@@ -35,6 +43,7 @@
                 @endforeach
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
@@ -42,3 +51,13 @@
 <!-- DataTables JS -->
 
 @include('admin.includes.footer')
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    });
+</script>
+

@@ -2,13 +2,24 @@
     <div class=" p-2">
         <ul class="nav nav-pills flex-column mt-4">
             <li class="nav-item py-2 py-sm-0">
-                <a href="{{route('student_dashboard')}}" class="nav-link text-white" aria-current="page">
+                <a href="" class="nav-link text-white" aria-current="page">
                     <img src="/assets/images/dashboard-icon.png" alt="dashboard-icon">
                     <span class="fs-4 ms-3 d-none d-sm-inline"> Dashboard </span>
                 </a>
             </li>
+
             <li class="nav-item py-2 py-sm-0">
-                <a href="" class="nav-link text-white dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false"  >
+                <a href="{{route('student_dashboard')}}" class="nav-link text-white" aria-current="page">
+                    <img src="/assets/images/dashboard-icon.png" alt="dashboard-icon">
+                    <span class="fs-4 ms-3 d-none d-sm-inline"> Final Clearance </span>
+                </a>
+            </li>
+
+
+
+
+            <li class="nav-item py-2 py-sm-0">
+                <a href="{{route('student_dashboard')}}" class="nav-link text-white dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"  >
                     <img src="/assets/images/dashboard-icon.png" alt="document-icon">
                     <span class="fs-4 ms-3 d-none d-sm-inline"> Clearance Units</span>
                 </a>

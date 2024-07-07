@@ -9,12 +9,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{route('student_dashboard')}}">Dashboard</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Help</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Clearance</a>
-                </li>
+
                 <div class="btn">
                     <a class="btn getstarted-btn" href="{{route('logout')}}" role="button" data-bs-toggle="" aria-expanded="false">
                         Log Out
