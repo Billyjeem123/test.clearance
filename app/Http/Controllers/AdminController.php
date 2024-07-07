@@ -18,10 +18,22 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-     public function index(){
 
-         return view('admin.index');
-     }
+
+    public function index(){
+
+        $student =    User::where('role', 'student')->count();
+        $all_student =    User::with('student')->where('role', 'student')->get();
+//        echo "<pre>";
+//        echo json_encode( $all_student,JSON_PRETTY_PRINT);
+//        echo "</pre>";
+
+        $users =    User::all()->count();
+        $unit_count = Unit::all()->count();
+        $final_year =    Db::table('students')->where('student_level', '500')->count();
+        return view('admin.index', [ 'all_student' => $all_student, 'student_count' => $student, 'final_year' => $final_year, 'unit_count' => $unit_count,  'users_count' => $users]);
+    }
+
 
 
     public function show_unit(){
@@ -49,6 +61,28 @@ class AdminController extends Controller
         // Redirect back with error message if credentials are incorrect
         return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
     }
+
+
+
+    public function profile($id) {
+        // Retrieve the student along with their related data
+        $student = User::with('student')->find($id);
+
+        // Check if the student exists
+        if (!$student) {
+            // Handle the case where the student is not found
+            // You can redirect to a 404 page or another appropriate response
+            return redirect()->back()->with('error', 'Student not found.');
+        }
+
+//                echo "<pre>";
+//        echo json_encode( $student,JSON_PRETTY_PRINT);
+//        echo "</pre>";
+
+        // Return the view with the student's data
+        return view('admin.student_profile', ['student' => $student]);
+    }
+
 
 
 

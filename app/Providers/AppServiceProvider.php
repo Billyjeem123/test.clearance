@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Share user data with all views
+
         Schema::defaultStringLength(191); // or any other value suitable for your application
         View::composer('*', function ($view) {
             $view->with('units', Unit::all());

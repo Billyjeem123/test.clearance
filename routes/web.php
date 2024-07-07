@@ -29,6 +29,7 @@ Route::post('/process-staff-login', [StudentController::class, 'login_staff'])->
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 Route::view('/admin/login', 'admin.admin_login')->name('admin_login');
 Route::post('/admin_login', [AdminController::class, 'login'])->name('admin_login_dash');
+Route::get('/student_profile/{id}', [AdminController::class, 'profile'])->name('profile');
 
 
 //Route::prefix('admin')->middleware('auth.admin')->group(function ()
@@ -52,6 +53,7 @@ Route::post('/admin_login', [AdminController::class, 'login'])->name('admin_logi
     Route::post('/assign-role', [AdminController::class, 'assignRole'])->name('assign_role');
     Route::get('/unassign-role', [AdminController::class, 'showUnAssignForm'])->name('unassign_role_form');
     Route::post('/unassign-role', [AdminController::class, 'unassignRole'])->name('unassign_role');
+
 });
 
 
