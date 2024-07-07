@@ -15,6 +15,25 @@ use Illuminate\Support\Facades\Mail;
 
 class StaffController extends Controller
 {
+
+
+
+    public function index(){
+
+        $student =    User::where('role', 'student')->count();
+        $all_student =    User::with('student')->where('role', 'student')->get();
+//        echo "<pre>";
+//        echo json_encode( $all_student,JSON_PRETTY_PRINT);
+//        echo "</pre>";
+
+        $users =    User::all()->count();
+        $unit_count = Unit::all()->count();
+        $final_year =    Db::table('students')->where('student_level', '500')->count();
+        return view('staff.index', [ 'all_student' => $all_student, 'student_count' => $student, 'final_year' => $final_year, 'unit_count' => $unit_count,  'users_count' => $users]);
+    }
+
+
+
     public function staff_dashboard()
     {
         $user = auth()->user();
@@ -36,7 +55,7 @@ class StaffController extends Controller
 //        echo "</pre>";
 
 
-        return view('staff.index', compact('clearance', 'approvedCount', 'pendingCount', 'disapprovedCount',    'totalCount'));
+        return view('staff.clearance', compact('clearance', 'approvedCount', 'pendingCount', 'disapprovedCount',    'totalCount'));
     }
 
 

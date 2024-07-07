@@ -73,7 +73,8 @@ Route::prefix('student')->middleware('auth')->group(function () {
 
 
 Route::prefix('staff')->middleware('auth')->group(function () {
-    Route::get('/', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
+    Route::get('/', [StaffController::class, 'index'])->name('staff.index');
+    Route::get('/clearance', [StaffController::class, 'staff_dashboard'])->name('staff_dashboard');
     Route::get('/submitted/documents', [StaffController::class, 'submitted_docs'])->name('submitted_docs');
     Route::get('/approve/{documentId}', [StaffController::class, 'showApprovalForm'])->name('document.approvalForm');
     Route::post('/approval', [StaffController::class, 'approveOrReject'])->name('document.approval');
