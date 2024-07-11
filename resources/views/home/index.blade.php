@@ -48,7 +48,7 @@
 <div class="container-fluid about-section">
     <div class="row">
         <div class="col-md-6">
-            ;<img src="/assets/images/hero-img2.png" alt="" style="width: 100%; margin-top: 2rem;">
+            ;<img src="/assets/images/hero-img2.png1" alt="" style="width: 100%; margin-top: 2rem;">
         </div>
 
         <div class="col-md-6">
@@ -134,19 +134,19 @@
             <b><h2 style="color: white;">Address Location</h2></b>
             <div>
                 <p style="color: white;">
-                    <img src="/assets/images/location-dot-solid.svg" alt="" class="icon">
+                    <img src="https://th.bing.com/th?id=OIF.KdeW6DgHqUZr3%2fJNrna1BQ&rs=1&pid=ImgDetMain" alt="" class="icon">
                     Opp. Olomola Hospital, Along Agric Settlement Road, Oke-Osun, Osogbo
                 </p>
             </div>
             <div>
                 <p style="color: white;">
-                    <img src="/assets/images/location-dot-solid.svg" alt="" class="icon">
+                    <img src="https://th.bing.com/th?id=OIF.KdeW6DgHqUZr3%2fJNrna1BQ&rs=1&pid=ImgDetMain" alt="" class="icon">
                     <a href="https://portal.fuo.edu.ng" style="color: white;">Fountain University's portal</a>
                 </p>
             </div>
             <div>
                 <p style="color: white;">
-                    <img src="/assets/images/envelope-solid.svg" alt="" class="icon">
+                    <img src="https://th.bing.com/th/id/OIP.4SsPTWCyhJTl1XEWSidAlQHaHa?rs=1&pid=ImgDetMain" alt="" class="icon">
                     mailsupport@fuo.edu.ng
                 </p>
             </div>
