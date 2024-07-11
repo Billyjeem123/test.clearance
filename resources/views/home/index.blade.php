@@ -126,23 +126,32 @@
                 <li><a href="">Clearance</a></li>
                 <li><a href="{{route('register_student')}}">Registration</a></li>
                 <li><a href="">Contact Us</a></li>
-                <li><a href="">Help</a></li>
+                <li><a href="{{route('staff_login')}}">Staff Login</a></li>
             </ul>
         </div>
-        <div class="col-md-3">
-            <i class="fa-solid fa-location-dot"></i>
-            <b><h2>Address Location</h2></b>
+        <div class="col-md-3" style="color: white;">
+            <i class="fa-solid fa-location-dot" style="background-color: white;"></i>
+            <b><h2 style="color: white;">Address Location</h2></b>
             <div>
-
-                <p> <img src="/assets/images/location-dot-solid.svg" alt="" class="icon"> Opp. Olomola Hospital, Along Agric Settlement Road, Oke-Osun, Osogbo</p>
+                <p style="color: white;">
+                    <img src="/assets/images/location-dot-solid.svg" alt="" class="icon">
+                    Opp. Olomola Hospital, Along Agric Settlement Road, Oke-Osun, Osogbo
+                </p>
             </div>
             <div>
-                <p><img src="/assets/images/location-dot-solid.svg" alt="" class="icon"> <a href="https://portal.fuo.edu.ng">Fountain University's portal</a></p>
+                <p style="color: white;">
+                    <img src="/assets/images/location-dot-solid.svg" alt="" class="icon">
+                    <a href="https://portal.fuo.edu.ng" style="color: white;">Fountain University's portal</a>
+                </p>
             </div>
             <div>
-                <p><img src="/assets/images/envelope-solid.svg" alt="" class="icon">  mailsupport@fuo.edu.ng</p>
+                <p style="color: white;">
+                    <img src="/assets/images/envelope-solid.svg" alt="" class="icon">
+                    mailsupport@fuo.edu.ng
+                </p>
             </div>
         </div>
+
     </div>
 </div>
 

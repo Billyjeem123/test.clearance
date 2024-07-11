@@ -45,7 +45,7 @@
 
                     @else
                         <a class="btn dropdown-toggle getstarted-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sign Up
+                            Sign In
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('login') }}">Student Login</a></li>

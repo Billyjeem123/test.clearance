@@ -9,7 +9,7 @@
             <div class="col-md-6 offset-md-3">
                 <div class="profile-card">
                     <div class="card-img">
-                        <img src="{{ $student->student->student_passport ?? asset('/placeholder.jpeg') }}" alt="Profile Image">
+                        <img src="{{ $student->student->student_passport ?? asset('/placeholder.jpeg') }}" alt="Profile Image" class="img-fluid" style="width:150px">
                     </div>
                     <h4>{{ $student->student->student_name }} {{ $student->student->middlename }} {{ $student->student->lastname }}</h4>
                     <hr>

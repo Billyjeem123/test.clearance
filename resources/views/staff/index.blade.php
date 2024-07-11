@@ -31,13 +31,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 unit-progress">
-                    <h4>Total Units</h4>
-                    <img src="/assets/images/tick-mark.png" alt="tick-mark">
-                    <div class="total-users-left">
-                        <h4>{{ $unit_count }}</h4>
-                    </div>
-                </div>
+
             </div>
 
             <h1 class="text-center">Student List</h1>
@@ -52,7 +46,7 @@
                             <th>Matric Number</th>
                             <th>Student Level</th>
                             <th>College Name</th>
-                            <th>Student DOB</th>
+                            <th>Student Department</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -64,7 +58,7 @@
                                 <td>{{ $student['matric_number'] }}</td>
                                 <td>{{ $student['student']['student_level'] }}</td>
                                 <td>{{ $student['student']['college_name'] }}</td>
-                                <td>{{ $student['student']['student_dob'] }}</td>
+                                <td>{{ $student['student']['student_dept'] }}</td>
                                 <td>
                                     <a href="{{route('student_profile', $student['id'])}}">
                                         <button class="btn btn-primary">View</button>

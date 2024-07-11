@@ -52,7 +52,7 @@
                             <th>Matric Number</th>
                             <th>Student Level</th>
                             <th>College Name</th>
-                            <th>Student DOB</th>
+                            <th>Student Department</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -64,7 +64,7 @@
                                 <td>{{ $student['matric_number'] }}</td>
                                 <td>{{ $student['student']['student_level'] }}</td>
                                 <td>{{ $student['student']['college_name'] }}</td>
-                                <td>{{ $student['student']['student_dob'] }}</td>
+                                <td>{{ $student['student']['student_dept'] }}</td>
                                 <td>
                                    <a href="{{route('profile', $student['id'])}}">
                                        <button class="btn btn-primary">View</button>
